@@ -913,6 +913,16 @@ function loadPlaylistToMainPlayer(key) {
   const pData = PLAYLISTS[key];
   if (!pData) return;
 
+  // Immediately update UI metadata & cover art icon
+  titleEl.textContent = pData.name;
+  artistEl.textContent = pData.sub;
+
+  if (pData.videoIds && pData.videoIds.length > 0) {
+    artEl.style.backgroundImage = `url(https://i.ytimg.com/vi/${pData.videoIds[0]}/hqdefault.jpg)`;
+  } else if (pData.playlistId) {
+    artEl.style.backgroundImage = `url(https://i.ytimg.com/vi/wF_B_aBweM8/hqdefault.jpg)`;
+  }
+
   if (pData.type === "playlist") {
     player.loadPlaylist({
       listType: "playlist",
@@ -926,6 +936,14 @@ function loadPlaylistToMainPlayer(key) {
 
   player.setVolume(85);
   player.playVideo();
+
+  // Rapidly poll refreshTrack for 4 seconds to sync YouTube's live video data & HD thumbnail
+  let checks = 0;
+  const syncTimer = setInterval(() => {
+    refreshTrack();
+    checks++;
+    if (checks > 15) clearInterval(syncTimer);
+  }, 250);
 
   showToast(`Loaded "${pData.name}" onto Main Player!`);
   playlistModal.classList.remove("open");
