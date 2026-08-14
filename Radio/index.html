@@ -31,7 +31,7 @@
 /* ─── Design Tokens ─── */
 :root {
   --cream: #FAF3E0;
-  --cream-dim: rgba(250, 243, 224, 0.72);
+  --cream-dim: rgba(250, 243, 224, 0.76);
   --saffron: #FF7722;
   --saffron-gold: #FFAA33;
   --saffron-deep: #D45500;
@@ -59,23 +59,42 @@ body {
   user-select: none;
 }
 
-/* ─── Full-Bleed Background ─── */
-.bg-layer {
+/* ─── Multi-Scene Cross-Fade Background Stage ─── */
+.bg-stage {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background: #254620 url("./background.jpg") center / cover no-repeat;
+  overflow: hidden;
+  background: #112214;
 }
-.bg-layer::after {
+.bg-slide {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1), transform 12s ease-out;
+  will-change: opacity, transform;
+}
+.bg-slide.active {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 1;
+}
+.bg-stage::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 2;
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 0, 0, 0.08) 0%,
-    rgba(10, 20, 10, 0.38) 65%,
+    rgba(0, 0, 0, 0.06) 0%,
+    rgba(10, 20, 10, 0.35) 60%,
     rgba(5, 12, 5, 0.72) 100%
   );
+  pointer-events: none;
 }
 
 /* ─── Tricolor Glowing Ambient Top Ribbon ─── */
@@ -101,7 +120,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px 28px 16px;
+  padding: 18px 26px 14px;
   box-sizing: border-box;
 }
 
@@ -140,6 +159,43 @@ body {
 @keyframes pulseLive {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* Scene Switcher Selector in Top Bar */
+.scene-indicators {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(14, 26, 16, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--card-border);
+  padding: 4px 10px;
+  border-radius: 999px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+.scene-dot {
+  background: rgba(255, 255, 255, 0.25);
+  border: 0;
+  color: var(--cream);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 9px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.25s ease;
+}
+.scene-dot:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+.scene-dot.active {
+  background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-deep) 100%);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(255, 119, 34, 0.5);
 }
 
 .top-actions {
@@ -186,14 +242,20 @@ body {
   100% { transform: translateY(-118vh) translateX(-8px) rotate(-3deg); opacity: 0; }
 }
 
-/* ─── Hero Section ─── */
+/* ─── Hero Section with Smooth Dynamic Transition ─── */
 .hero {
   text-align: center;
   margin: auto 0;
   padding: 0 16px 20px;
   position: relative;
   z-index: 5;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
+.hero.transitioning {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
 .kicker-badge {
   display: inline-flex;
   align-items: center;
@@ -244,14 +306,14 @@ h1 {
 .quote-box {
   max-width: 600px;
   margin: 0 auto;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
   padding: 6px 18px;
   font-size: clamp(11px, 1.2vw, 12.5px);
   color: var(--cream);
-  opacity: 0.85;
+  opacity: 0.88;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -281,7 +343,7 @@ h1 {
   z-index: 10;
 }
 
-/* Cover Art with Glowing Halo */
+/* Cover Art */
 .art-wrapper {
   position: relative;
   flex-shrink: 0;
@@ -671,16 +733,16 @@ h1 {
 }
 
 /* ─── Responsive ─── */
-@media (max-width: 600px) {
+@media (max-width: 680px) {
   .shell { padding: 12px; }
   .topbar { flex-wrap: wrap; justify-content: space-between; }
-  .ambience-picker { order: 3; width: 100%; justify-content: center; margin-top: 4px; }
+  .scene-indicators { order: 3; width: 100%; justify-content: center; margin-top: 4px; }
   .radio-console { gap: 10px; padding: 8px 10px 8px 8px; border-radius: 20px; }
   .art { width: 56px; height: 56px; border-radius: 14px; }
   .ctrl.shuffle { display: none; }
   .ctrl { width: 34px; height: 34px; }
   .ctrl.play { width: 44px; height: 44px; }
-  .hero { padding-bottom: 40px; }
+  .hero { padding-bottom: 30px; }
   .modal-content { padding: 16px; border-radius: 18px; }
   .modal-body iframe { height: 280px; }
   .action-bar { flex-direction: column; align-items: stretch; gap: 8px; text-align: center; }
@@ -689,13 +751,22 @@ h1 {
 @media (prefers-reduced-motion: reduce) {
   .dot-live { animation: none; }
   .particle { animation: none; display: none; }
+  .bg-slide { transition: opacity 0.5s ease; transform: none; }
 }
 </style>
 </head>
 
 <body>
 <div class="ribbon"></div>
-<div class="bg-layer" id="bgLayer"></div>
+
+<!-- Multi-Scene Dynamic Stage -->
+<div class="bg-stage" id="bgStage">
+  <div class="bg-slide active" style="background-image: url('./scene1_redfort.jpg');"></div>
+  <div class="bg-slide" style="background-image: url('./scene2_indiagate.jpg');"></div>
+  <div class="bg-slide" style="background-image: url('./scene3_himalayas.jpg');"></div>
+  <div class="bg-slide" style="background-image: url('./scene4_varanasi.jpg');"></div>
+  <div class="bg-slide" style="background-image: url('./scene5_rashtrapati.jpg');"></div>
+</div>
 
 <!-- Toast notification -->
 <div class="toast" id="toast">
@@ -706,11 +777,20 @@ h1 {
 <div class="particles" id="particles"></div>
 
 <div class="shell">
-  <!-- Top Bar -->
+  <!-- Top Bar with Scene Indicators & Tribute -->
   <header class="topbar">
     <div class="brand-pill">
       <span class="dot-live"></span>
       <span><b id="listeners">1</b> listening live</span>
+    </div>
+
+    <!-- 5 Monument Scene Selector Dots -->
+    <div class="scene-indicators" role="tablist" aria-label="Heritage scene selector">
+      <button class="scene-dot active" data-idx="0" title="Lal Qila (Red Fort)">🏰 Lal Qila</button>
+      <button class="scene-dot" data-idx="1" title="India Gate Memorial">🎖️ India Gate</button>
+      <button class="scene-dot" data-idx="2" title="Himalayan Heights">🏔️ Himalaya</button>
+      <button class="scene-dot" data-idx="3" title="Ganga Ghats Sunrise">🪔 Varanasi</button>
+      <button class="scene-dot" data-idx="4" title="Rashtrapati Bhavan">🏛️ Kartavya Path</button>
     </div>
 
     <div class="top-actions">
@@ -721,12 +801,12 @@ h1 {
     </div>
   </header>
 
-  <!-- Hero Branding -->
-  <section class="hero">
-    <div class="kicker-badge">✦ 79th Independence Day Edition ✦</div>
-    <h1>राष्ट्र ध्वनि</h1>
-    <p class="tagline-sub">Echoes of India · The Soul of Freedom</p>
-    <div class="frequency-banner">94.7 FM &bull; 15 August 2026 &bull; Timeless Patriotic Radio 🇮🇳</div>
+  <!-- Hero Branding (Smoothly adapts per scene) -->
+  <section class="hero" id="heroSection">
+    <div class="kicker-badge" id="sceneKicker">✦ 79th Independence Day Edition ✦</div>
+    <h1 id="sceneTitle">राष्ट्र ध्वनि</h1>
+    <p class="tagline-sub" id="sceneSub">Echoes of India · The Soul of Freedom</p>
+    <div class="frequency-banner" id="sceneFreq">94.7 FM &bull; Lal Qila Heritage &bull; Timeless Patriotic Radio 🇮🇳</div>
     
     <!-- Rotating Inspiring Quotes Ticker -->
     <div class="quote-box" id="quoteTicker">
@@ -831,6 +911,111 @@ h1 {
 <div id="yt"></div>
 
 <script>
+/* ─────────────────────────────────────────────
+   5 Iconic Heritage Scenes Catalog
+   ───────────────────────────────────────────── */
+const SCENES = [
+  {
+    name: "Lal Qila",
+    kicker: "✦ 79th Independence Day Edition ✦",
+    title: "राष्ट्र ध्वनि",
+    sub: "Echoes of India · The Soul of Freedom",
+    frequency: "94.7 FM • Lal Qila Heritage • Timeless Patriotic Radio 🇮🇳",
+    quote: '"स्वतंत्रता हमारा जन्मसिद्ध अधिकार है और हम इसे लेकर रहेंगे।" — लोकमान्य तिलक'
+  },
+  {
+    name: "India Gate",
+    kicker: "✦ Amar Jawan & National Memorial ✦",
+    title: "वीर गाथा",
+    sub: "Tribute to the Unsung Martyrs & Bravehearts",
+    frequency: "102.4 FM • India Gate Memorial • Flame of Courage 🇮🇳",
+    quote: '"शहीदों की चिताओं पर लगेंगे हर बरस मेले, वतन पर मरने वालों का यही बाक़ी निशां होगा।" — जगदम्बा प्रसाद मिश्र'
+  },
+  {
+    name: "Himalayas",
+    kicker: "✦ Spirit of the High Frontiers ✦",
+    title: "हिमशिखर राग",
+    sub: "Standing Tall · Resolute & Sovereign",
+    frequency: "88.5 FM • Himalayan Echoes • Pride of the Borders 🇮🇳",
+    quote: '"सरफ़रोशी की तमन्ना अब हमारे दिल में है, देखना है ज़ोर कितना बाज़ू-ए-कातिल में है।" — रामप्रसाद बिस्मिल'
+  },
+  {
+    name: "Varanasi",
+    kicker: "✦ Eternal Culture & Harmony ✦",
+    title: "मातृभूमि वंदन",
+    sub: "Sacred Heritage · The Eternal River of Unity",
+    frequency: "94.7 FM • Ganga Ghats Sunrise • Devotional & Classical 🇮🇳",
+    quote: '"Where the mind is without fear and the head is held high..." — Rabindranath Tagore'
+  },
+  {
+    name: "Kartavya Path",
+    kicker: "✦ Rise of a Free Sovereign Nation ✦",
+    title: "स्वर्ण भारत",
+    sub: "Democracy, Dignity & A Resurgent Republic",
+    frequency: "102.4 FM • Kartavya Path • 79 Years of Sovereignty 🇮🇳",
+    quote: '"तुम मुझे खून दो, मैं तुम्हें आज़ादी दूंगा!" — नेताजी सुभाष चंद्र बोस'
+  }
+];
+
+let currentSceneIdx = 0;
+const bgSlides = document.querySelectorAll(".bg-slide");
+const sceneDots = document.querySelectorAll(".scene-dot");
+const heroSection = document.getElementById("heroSection");
+const sceneKicker = document.getElementById("sceneKicker");
+const sceneTitle = document.getElementById("sceneTitle");
+const sceneSub = document.getElementById("sceneSub");
+const sceneFreq = document.getElementById("sceneFreq");
+const quoteTicker = document.getElementById("quoteTicker");
+
+function setScene(idx) {
+  if (idx < 0) idx = SCENES.length - 1;
+  if (idx >= SCENES.length) idx = 0;
+  currentSceneIdx = idx;
+
+  // Crossfade background slides
+  bgSlides.forEach((slide, i) => {
+    slide.classList.toggle("active", i === idx);
+  });
+
+  // Update dots
+  sceneDots.forEach((dot, i) => {
+    dot.classList.toggle("active", i === idx);
+  });
+
+  // Smooth text morph
+  heroSection.classList.add("transitioning");
+  setTimeout(() => {
+    const sc = SCENES[idx];
+    sceneKicker.textContent = sc.kicker;
+    sceneTitle.textContent = sc.title;
+    sceneSub.textContent = sc.sub;
+    sceneFreq.textContent = sc.frequency;
+    quoteTicker.textContent = sc.quote;
+    heroSection.classList.remove("transitioning");
+  }, 350);
+}
+
+// Scene switcher dot click handlers
+sceneDots.forEach(dot => {
+  dot.addEventListener("click", () => {
+    const idx = parseInt(dot.getAttribute("data-idx"), 10);
+    setScene(idx);
+    resetSceneTimer();
+  });
+});
+
+// Auto-advance scenes every 22 seconds
+let sceneInterval = setInterval(() => {
+  setScene((currentSceneIdx + 1) % SCENES.length);
+}, 22000);
+
+function resetSceneTimer() {
+  clearInterval(sceneInterval);
+  sceneInterval = setInterval(() => {
+    setScene((currentSceneIdx + 1) % SCENES.length);
+  }, 22000);
+}
+
 /* ─────────────────────────────────────────────
    Playlists Catalog & Direct Stream Queues (100% Stable)
    ───────────────────────────────────────────── */
@@ -1192,33 +1377,9 @@ bar.addEventListener("click", e => {
     localStorage.setItem("rashtra_diya_count", String(currentDiyas));
     showToast("🪔 Tribute Diya lit with pride & honour!");
 
-    // Little celebratory burst
     diyaBtn.style.transform = "scale(1.2)";
     setTimeout(() => { diyaBtn.style.transform = ""; }, 220);
   });
-})();
-
-/* ─── Freedom Quotes Rotator ─── */
-(function() {
-  const quotes = [
-    '"स्वतंत्रता हमारा जन्मसिद्ध अधिकार है और हम इसे लेकर रहेंगे।" — लोकमान्य तिलक',
-    '"सरफ़रोशी की तमन्ना अब हमारे दिल में है, देखना है ज़ोर कितना बाज़ू-ए-कातिल में है।" — रामप्रसाद बिस्मिल',
-    '"तुम मुझे खून दो, मैं तुम्हें आज़ादी दूंगा!" — नेताजी सुभाष चंद्र बोस',
-    '"Where the mind is without fear and the head is held high..." — Rabindranath Tagore',
-    '"इंक़लाब ज़िंदाबाद!" — भगत सिंह',
-    '"A country\'s greatness lies in its undying ideals of love and sacrifice." — Sarojini Naidu'
-  ];
-  let qIdx = 0;
-  const el = document.getElementById("quoteTicker");
-  
-  setInterval(() => {
-    el.style.opacity = "0";
-    setTimeout(() => {
-      qIdx = (qIdx + 1) % quotes.length;
-      el.textContent = quotes[qIdx];
-      el.style.opacity = "0.85";
-    }, 400);
-  }, 7500);
 })();
 
 /* ─── Local Clock ─── */
