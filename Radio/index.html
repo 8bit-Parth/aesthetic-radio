@@ -59,35 +59,22 @@ body {
   user-select: none;
 }
 
-/* ─── Full-Bleed Dynamic Ambience Background ─── */
+/* ─── Full-Bleed Background ─── */
 .bg-layer {
   position: fixed;
   inset: 0;
   z-index: 0;
   background: #254620 url("./background.jpg") center / cover no-repeat;
-  transition: filter 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s ease;
 }
-
-/* Ambience Presets */
-body[data-ambience="sandhya"] .bg-layer {
-  filter: brightness(0.95) saturate(1.15) contrast(1.05);
-}
-body[data-ambience="ratri"] .bg-layer {
-  filter: brightness(0.55) saturate(1.4) hue-rotate(210deg) contrast(1.15);
-}
-body[data-ambience="prabhat"] .bg-layer {
-  filter: brightness(1.1) saturate(1.25) sepia(0.12) contrast(1.02);
-}
-
 .bg-layer::after {
   content: "";
   position: absolute;
   inset: 0;
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 0, 0, 0.12) 0%,
-    rgba(10, 20, 10, 0.45) 65%,
-    rgba(5, 12, 5, 0.82) 100%
+    rgba(0, 0, 0, 0.08) 0%,
+    rgba(10, 20, 10, 0.38) 65%,
+    rgba(5, 12, 5, 0.72) 100%
   );
 }
 
@@ -153,44 +140,6 @@ body[data-ambience="prabhat"] .bg-layer {
 @keyframes pulseLive {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(0.8); }
-}
-
-/* Ambience Theme Switcher */
-.ambience-picker {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(14, 26, 16, 0.55);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid var(--card-border);
-  padding: 3px;
-  border-radius: 999px;
-  gap: 3px;
-}
-.amb-btn {
-  background: transparent;
-  border: 0;
-  color: var(--cream-dim);
-  font-family: var(--font-sans);
-  font-size: 11.5px;
-  font-weight: 500;
-  padding: 5px 11px;
-  border-radius: 999px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.25s ease;
-}
-.amb-btn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
-}
-.amb-btn.active {
-  background: linear-gradient(135deg, rgba(255, 119, 34, 0.85) 0%, rgba(212, 85, 0, 0.85) 100%);
-  color: #fff;
-  font-weight: 600;
-  box-shadow: 0 2px 10px rgba(255, 119, 34, 0.4);
 }
 
 .top-actions {
@@ -744,7 +693,7 @@ h1 {
 </style>
 </head>
 
-<body data-ambience="sandhya">
+<body>
 <div class="ribbon"></div>
 <div class="bg-layer" id="bgLayer"></div>
 
@@ -757,18 +706,11 @@ h1 {
 <div class="particles" id="particles"></div>
 
 <div class="shell">
-  <!-- Top Bar with Ambience & Tribute Features -->
+  <!-- Top Bar -->
   <header class="topbar">
     <div class="brand-pill">
       <span class="dot-live"></span>
       <span><b id="listeners">1</b> listening live</span>
-    </div>
-
-    <!-- Ambience Mood Selector -->
-    <div class="ambience-picker" role="radiogroup" aria-label="Ambience theme selector">
-      <button class="amb-btn active" data-amb="sandhya" title="Golden Sunset">🌅 Sandhya</button>
-      <button class="amb-btn" data-amb="ratri" title="Midnight Tricolor">🌌 Ratri</button>
-      <button class="amb-btn" data-amb="prabhat" title="Morning Dawn">🌄 Prabhat</button>
     </div>
 
     <div class="top-actions">
@@ -1234,17 +1176,6 @@ bar.addEventListener("click", e => {
   const r = bar.getBoundingClientRect();
   const du = player.getDuration();
   if (du) player.seekTo((e.clientX - r.left) / r.width * du, true);
-});
-
-/* ─── Ambience Theme Switcher ─── */
-const ambButtons = document.querySelectorAll(".amb-btn");
-ambButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    const amb = btn.getAttribute("data-amb");
-    document.body.setAttribute("data-ambience", amb);
-    ambButtons.forEach(b => b.classList.toggle("active", b === btn));
-    showToast(`Atmosphere set to ${btn.textContent.trim()}`);
-  });
 });
 
 /* ─── Light a Diya Tribute Widget ─── */
