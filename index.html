@@ -205,18 +205,6 @@ body {
   align-items: center;
   gap: 8px;
 }
-.diya-pill {
-  cursor: pointer;
-  transition: transform 0.18s ease, background 0.2s ease;
-}
-.diya-pill:hover {
-  transform: scale(1.05);
-  background: rgba(255, 119, 34, 0.25);
-  border-color: rgba(255, 170, 51, 0.5);
-}
-.diya-pill:active {
-  transform: scale(0.96);
-}
 
 /* ─── Floating Tricolor Balloons & Accents ─── */
 .particles {
@@ -864,9 +852,6 @@ h1 {
     </div>
 
     <div class="top-actions">
-      <button class="brand-pill diya-pill" id="diyaBtn" title="Light a Tribute Diya">
-        <span>🪔</span> <b id="diyaCount">1,947</b>
-      </button>
       <span class="brand-pill"><span id="clock">--:--</span></span>
     </div>
   </header>
@@ -1433,11 +1418,9 @@ bar.addEventListener("click", e => {
   if (du) player.seekTo((e.clientX - r.left) / r.width * du, true);
 });
 
-/* ─── Real-Time Global Firebase Presence & Tribute Sync ─── */
+/* ─── Real-Time Global Firebase Live Presence ─── */
 (function() {
   const listenersEl = document.getElementById("listeners");
-  const diyaCountEl = document.getElementById("diyaCount");
-  const diyaBtn     = document.getElementById("diyaBtn");
 
   const firebaseConfig = {
     apiKey: ["AIzaSyD6hi96", "mchknzywnPiQzo84", "NmG0I5Z5tMQ"].join(""),
@@ -1462,7 +1445,7 @@ bar.addEventListener("click", e => {
   }
 
   if (db) {
-    // 1. LIVE GLOBAL PRESENCE
+    // REAL-TIME GLOBAL PRESENCE
     const sessionId = "listener_" + Math.random().toString(36).substring(2, 10);
     const userPresenceRef = db.ref("live_listeners/" + sessionId);
     const connectedRef = db.ref(".info/connected");
@@ -1483,44 +1466,6 @@ bar.addEventListener("click", e => {
         listenersEl.textContent = Math.max(1, activeGlobalCount).toLocaleString("en-IN");
       }
     });
-
-    // 2. LIVE GLOBAL TRIBUTE DIYA COUNTER
-    const diyaRef = db.ref("tributes/diyaCount");
-    diyaRef.on("value", snap => {
-      let count = snap.val();
-      if (typeof count !== "number" || count < 1947) {
-        count = 1947;
-      }
-      if (diyaCountEl) {
-        diyaCountEl.textContent = count.toLocaleString("en-IN");
-      }
-    });
-
-    if (diyaBtn) {
-      diyaBtn.addEventListener("click", () => {
-        diyaRef.transaction(current => {
-          return (typeof current === "number" && current >= 1947) ? current + 1 : 1948;
-        });
-        showToast("🪔 Tribute Diya lit with pride & honour!");
-        diyaBtn.style.transform = "scale(1.2)";
-        setTimeout(() => { diyaBtn.style.transform = ""; }, 220);
-      });
-    }
-  } else {
-    // Graceful offline / fallback
-    let currentDiyas = parseInt(localStorage.getItem("rashtra_diya_count") || "1947", 10);
-    if (diyaCountEl) diyaCountEl.textContent = currentDiyas.toLocaleString("en-IN");
-
-    if (diyaBtn) {
-      diyaBtn.addEventListener("click", () => {
-        currentDiyas++;
-        if (diyaCountEl) diyaCountEl.textContent = currentDiyas.toLocaleString("en-IN");
-        localStorage.setItem("rashtra_diya_count", String(currentDiyas));
-        showToast("🪔 Tribute Diya lit with pride & honour!");
-        diyaBtn.style.transform = "scale(1.2)";
-        setTimeout(() => { diyaBtn.style.transform = ""; }, 220);
-      });
-    }
   }
 })();
 
