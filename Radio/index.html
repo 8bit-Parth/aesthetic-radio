@@ -913,14 +913,19 @@ function loadPlaylistToMainPlayer(key) {
   const pData = PLAYLISTS[key];
   if (!pData) return;
 
-  // Immediately update UI metadata & cover art icon
+  // Immediately set player title & thumbnail art for the new playlist
   titleEl.textContent = pData.name;
   artistEl.textContent = pData.sub;
 
-  if (pData.videoIds && pData.videoIds.length > 0) {
-    artEl.style.backgroundImage = `url(https://i.ytimg.com/vi/${pData.videoIds[0]}/hqdefault.jpg)`;
-  } else if (pData.playlistId) {
-    artEl.style.backgroundImage = `url(https://i.ytimg.com/vi/wF_B_aBweM8/hqdefault.jpg)`;
+  let firstVid = null;
+  if (pData.type === "videos" && pData.videoIds && pData.videoIds.length > 0) {
+    firstVid = pData.videoIds[0];
+  } else if (pData.type === "playlist") {
+    firstVid = "djV11Xbc914";
+  }
+
+  if (firstVid) {
+    artEl.style.backgroundImage = `url(https://i.ytimg.com/vi/${firstVid}/hqdefault.jpg)`;
   }
 
   if (pData.type === "playlist") {
@@ -937,13 +942,18 @@ function loadPlaylistToMainPlayer(key) {
   player.setVolume(85);
   player.playVideo();
 
-  // Rapidly poll refreshTrack for 4 seconds to sync YouTube's live video data & HD thumbnail
+  // Poll refreshTrack to catch YouTube's HD video title and thumbnail when loaded
   let checks = 0;
   const syncTimer = setInterval(() => {
-    refreshTrack();
+    try {
+      const d = player.getVideoData && player.getVideoData();
+      if (d && d.video_id && (d.video_id === firstVid || checks > 4)) {
+        refreshTrack();
+      }
+    } catch (_) {}
     checks++;
-    if (checks > 15) clearInterval(syncTimer);
-  }, 250);
+    if (checks > 12) clearInterval(syncTimer);
+  }, 300);
 
   showToast(`Loaded "${pData.name}" onto Main Player!`);
   playlistModal.classList.remove("open");
