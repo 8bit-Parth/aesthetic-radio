@@ -802,7 +802,9 @@ window.onYouTubeIframeAPIReady = function() {
       controls: 0,
       playsinline: 1,
       rel: 0,
-      loop: 1
+      loop: 1,
+      enablejsapi: 1,
+      origin: window.location.origin
     },
     events: {
       onReady: () => {
