@@ -17,9 +17,11 @@
 <meta property="og:locale" content="en_IN">
 <meta name="twitter:card" content="summary_large_image">
 
-<!-- CDN Preconnects for Instant Loading -->
+<!-- CDN Preconnects & Parallel API Preload -->
 <link rel="preconnect" href="https://www.youtube.com">
+<link rel="preconnect" href="https://www.youtube-nocookie.com">
 <link rel="preconnect" href="https://i.ytimg.com">
+<link rel="preconnect" href="https://s.ytimg.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
@@ -59,325 +61,287 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(110% 90% at 50% 42%, transparent 48%, rgba(8,12,8,.42)),
-    linear-gradient(to bottom, rgba(0,0,0,.12), transparent 22%, transparent 68%, rgba(0,0,0,.32));
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.08) 0%,
+    rgba(0, 0, 0, 0.38) 70%,
+    rgba(0, 0, 0, 0.62) 100%
+  );
 }
-/* Film grain overlay */
-.bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: .075;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+/* ─── Tricolor Ambient Top Ribbon ─── */
+.ribbon {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    #FF671F 0%, #FF671F 33.3%,
+    #FFFFFF 33.3%, #FFFFFF 66.6%,
+    #046A38 66.6%, #046A38 100%
+  );
+  z-index: 20;
+  box-shadow: 0 0 16px rgba(255, 103, 31, 0.75), 0 0 24px rgba(4, 106, 56, 0.75);
 }
 
 /* ─── Layout Shell ─── */
 .shell {
   position: relative;
   z-index: 2;
-  height: 100dvh;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 18px;
+  justify-content: space-between;
+  padding: 24px 28px 20px;
+  box-sizing: border-box;
 }
 
 /* ─── Top Bar ─── */
 .topbar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  font-family: "Yatra One", cursive;
-  font-size: clamp(11px, 1.5vw, 14px);
-  letter-spacing: .03em;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: .02em;
 }
 .pill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(20,20,12,.28);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(247,239,219,.22);
+  gap: 7px;
+  background: rgba(20, 35, 20, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(247, 239, 219, 0.22);
+  padding: 6px 14px;
   border-radius: 999px;
-  padding: 7px 14px;
   color: var(--cream);
-  box-shadow: 0 6px 22px rgba(0,0,0,.12);
-  transition: background .2s;
-}
-.pill:hover {
-  background: rgba(20,20,12,.38);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 .dot {
-  width: 8px; height: 8px; border-radius: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   background: #62e28b;
-  box-shadow: 0 0 0 0 rgba(98,226,139,.6);
-  animation: pulse 2.2s ease-out infinite;
+  box-shadow: 0 0 8px #62e28b;
+  animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse {
-  70% { box-shadow: 0 0 0 8px rgba(98,226,139,0) }
-  100% { box-shadow: 0 0 0 0 rgba(98,226,139,0) }
-}
-.clock {
-  font-family: "Courier New", monospace;
-  font-variant-numeric: tabular-nums;
-}
-
-/* ─── Saffron ribbon accent ─── */
-.ribbon {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--saffron), #ffd27a, var(--saffron));
-  z-index: 10;
-  opacity: .7;
-}
-
-/* ─── Hero Section ─── */
-.hero {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 8px;
-  padding-bottom: 100px;
-  position: relative;
-}
-.hero::before {
-  content: "";
-  position: absolute;
-  width: min(900px, 90vw);
-  height: 330px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at center,
-    rgba(56,34,15,.22) 0%,
-    rgba(56,34,15,.10) 42%,
-    transparent 72%);
-  filter: blur(8px);
-  pointer-events: none;
-  z-index: -1;
-}
-.kicker {
-  font-family: "Yatra One", cursive;
-  letter-spacing: .18em;
-  font-size: clamp(10px, 1.4vw, 13px);
-  color: #fff0d8;
-  margin: 0;
-  opacity: .88;
-  text-transform: uppercase;
-}
-h1 {
-  margin: 0;
-  font-weight: 400;
-  line-height: .95;
-  font-size: clamp(52px, 9vw, 116px);
-  letter-spacing: .01em;
-  color: var(--white-gold);
-  text-shadow:
-    0 3px 0 rgba(55,34,15,.34),
-    0 6px 18px rgba(35,22,10,.48),
-    0 18px 42px rgba(0,0,0,.34);
-}
-.hindi {
-  font-family: "Yatra One", cursive;
-  font-size: clamp(18px, 3.2vw, 30px);
-  color: var(--white-gold);
-  margin: 8px 0 0;
-  text-shadow:
-    0 2px 0 rgba(55,34,15,.35),
-    0 4px 14px rgba(35,22,10,.48);
-}
-.sub {
-  font-family: var(--sans);
-  font-size: clamp(11px, 1.45vw, 14px);
-  color: var(--white-gold);
-  opacity: .92;
-  margin: 3px 0 0;
-  text-shadow: 0 2px 10px rgba(0,0,0,.45);
-}
-
-/* ─── Toast Notification ─── */
-.toast {
-  position: fixed;
-  top: 60px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-20px);
-  z-index: 200;
-  background: rgba(24, 34, 22, 0.95);
-  border: 1px solid rgba(232, 135, 59, 0.6);
-  box-shadow: 0 12px 36px rgba(0,0,0,0.5);
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 999px;
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
 }
 
 /* ─── Floating Particles ─── */
 .particles {
   position: fixed;
   inset: 0;
-  z-index: 1;
   pointer-events: none;
+  z-index: 1;
   overflow: hidden;
 }
 .particle {
   position: absolute;
-  font-size: 18px;
+  bottom: -40px;
   opacity: 0;
-  animation: float-up linear infinite;
+  animation: floatUp linear infinite;
 }
-@keyframes float-up {
-  0% { opacity: 0; transform: translateY(100vh) rotate(0deg); }
-  10% { opacity: .6; }
-  90% { opacity: .4; }
-  100% { opacity: 0; transform: translateY(-10vh) rotate(360deg); }
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.65; }
+  85% { opacity: 0.65; }
+  100% { transform: translateY(-115vh) rotate(360deg); opacity: 0; }
 }
 
-/* ─── Glassmorphic Player ─── */
+/* ─── Hero Section ─── */
+.hero {
+  text-align: center;
+  margin: auto 0;
+  padding: 0 16px 40px;
+}
+.kicker {
+  font-family: "Yatra One", "Rozha One", serif;
+  font-size: clamp(13px, 1.9vw, 17px);
+  color: var(--saffron);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+}
+h1 {
+  font-family: "Rozha One", "Yatra One", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(44px, 7.5vw, 96px);
+  line-height: 1.02;
+  margin: 0 0 12px;
+  color: var(--white-gold);
+  letter-spacing: -0.01em;
+  text-shadow:
+    0 4px 28px rgba(0, 0, 0, 0.65),
+    0 1px 3px rgba(0, 0, 0, 0.9);
+}
+.hindi {
+  font-family: "Yatra One", "Rozha One", serif;
+  font-size: clamp(16px, 2.4vw, 24px);
+  margin: 0 0 8px;
+  color: var(--cream);
+  opacity: 0.94;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
+}
+.sub {
+  font-family: var(--sans);
+  font-size: clamp(12px, 1.4vw, 15px);
+  color: var(--cream);
+  opacity: 0.78;
+  margin: 0;
+  letter-spacing: .03em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Compact Player ─── */
 .player {
+  position: relative;
   align-self: center;
-  width: min(590px, calc(100% - 4px));
-  margin-bottom: 42px;
+  width: 100%;
+  max-width: 580px;
+  background: rgba(18, 28, 16, 0.62);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(247, 239, 219, 0.25);
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.55),
+    0 2px 6px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  border-radius: 26px;
+  padding: 10px 14px 10px 10px;
   display: flex;
   align-items: center;
-  gap: 13px;
-  padding: 10px 15px 10px 10px;
-  border-radius: 24px;
-  color: #fff;
-  font-family: var(--sans);
-  background: rgba(31,20,16,.30);
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
-  border: 1px solid rgba(255,255,255,.20);
-  box-shadow:
-    0 22px 55px rgba(0,0,0,.32),
-    inset 0 1px 0 rgba(255,255,255,.25);
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-.player:hover {
-  transform: translateY(-1px);
-  box-shadow:
-    0 26px 65px rgba(0,0,0,.36),
-    inset 0 1px 0 rgba(255,255,255,.28);
+  gap: 14px;
+  margin-bottom: 8px;
 }
 
-/* Album Art */
 .art {
-  width: 70px;
-  height: 70px;
-  flex: none;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--saffron), var(--green)) center/cover no-repeat;
-  box-shadow: 0 10px 24px rgba(0,0,0,.35);
-  transition: background-image .3s ease;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: #182614 url("https://i.ytimg.com/vi/BF2EMEoq27U/hqdefault.jpg") center/cover no-repeat;
+  flex-shrink: 0;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  position: relative;
   overflow: hidden;
+  transition: background-image 0.25s ease;
+}
+.art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.35);
 }
 
-/* Song Meta */
-.meta { flex: 1; min-width: 0; }
+.meta {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sans);
+}
 .title {
-  font-weight: 700;
-  font-size: clamp(13px, 1.6vw, 17px);
-  line-height: 1.15;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--white-gold);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 2px;
+  letter-spacing: .01em;
 }
 .artist {
-  font-weight: 500;
-  font-size: clamp(11px, 1.35vw, 13px);
-  opacity: .72;
-  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--cream);
+  opacity: 0.72;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 7px;
 }
 
-/* Progress Bar */
 .bar {
-  margin-top: 9px;
-  height: 5px;
-  border-radius: 6px;
-  background: rgba(255,255,255,.18);
-  position: relative;
-  cursor: pointer;
+  height: 4px;
+  background: rgba(247, 239, 219, 0.2);
+  border-radius: 999px;
   overflow: hidden;
-  transition: height .15s;
+  cursor: pointer;
+  position: relative;
 }
-.bar:hover { height: 7px; }
-.bar .fill {
-  position: absolute;
-  inset: 0 auto 0 0;
+.fill {
+  height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--saffron), #ffd27a);
-  border-radius: 6px;
-  transition: width .25s linear;
+  background: linear-gradient(90deg, var(--saffron) 0%, #ffaa5b 100%);
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(232, 135, 59, 0.85);
+  transition: width 0.25s linear;
 }
-
-/* Time Display */
 .time {
-  margin-top: 5px;
-  font-size: 10px;
-  opacity: .68;
-  letter-spacing: .02em;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.5px;
+  color: var(--cream);
+  opacity: 0.6;
+  margin-top: 4px;
   font-variant-numeric: tabular-nums;
 }
 
-/* Controls */
+/* ─── Controls ─── */
 .controls {
   display: flex;
   align-items: center;
-  gap: 2px;
-  flex: none;
+  gap: 4px;
 }
 .ctrl {
-  border: none;
   background: transparent;
-  color: #fff;
-  cursor: pointer;
+  border: 0;
+  color: var(--cream);
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  display: grid;
-  place-items: center;
-  transition: background .15s, transform .12s;
-  touch-action: manipulation;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: transform .15s ease, background .15s ease, color .15s ease, opacity .15s ease;
+  opacity: 0.88;
 }
-.ctrl:hover { background: rgba(255,255,255,.14); }
-.ctrl:active { transform: scale(.94); }
-.ctrl:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-.ctrl svg { width: 18px; height: 18px; display: block; }
+.ctrl:hover {
+  transform: scale(1.08);
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+.ctrl:active {
+  transform: scale(0.94);
+}
+.ctrl svg {
+  width: 17px;
+  height: 17px;
+}
 
-/* Shuffle button */
-.ctrl.shuffle { background: rgba(255,255,255,.10); }
-.ctrl.shuffle.on { color: #ffd27a; background: rgba(255,210,122,.18); }
+.ctrl.shuffle.on {
+  color: var(--saffron);
+  opacity: 1;
+}
 
-/* Play button */
 .ctrl.play {
-  width: 48px; height: 48px;
-  background: #fff; color: #1a1024;
-  box-shadow: 0 8px 22px rgba(0,0,0,.32);
+  width: 46px;
+  height: 46px;
+  background: linear-gradient(135deg, #ffffff 0%, var(--cream) 100%);
+  color: #1a2a16;
+  opacity: 1;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 18px rgba(247, 239, 219, 0.35);
+  margin: 0 3px;
 }
-.ctrl.play:hover { background: #fff; transform: scale(1.06); }
-.ctrl.play:active { transform: scale(.98); }
+.ctrl.play:hover {
+  background: #ffffff;
+  transform: scale(1.09);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 24px rgba(255, 255, 255, 0.6);
+}
 .ctrl.play svg { width: 22px; height: 22px; }
 
 /* ─── Footer ─── */
@@ -394,10 +358,13 @@ h1 {
 
 /* ─── Hidden YouTube Player ─── */
 #yt {
-  position: absolute;
+  position: fixed;
+  top: -9999px;
   left: -9999px;
-  width: 1px; height: 1px;
-  opacity: 0;
+  width: 200px;
+  height: 200px;
+  opacity: 0.001;
+  pointer-events: none;
 }
 
 /* ─── In-Site Playlist Modal / Overlay ─── */
@@ -445,108 +412,106 @@ h1 {
   align-items: center;
   justify-content: space-between;
   padding-bottom: 14px;
-  border-b: 1px solid rgba(247, 239, 219, 0.15);
+  border-bottom: 1px solid rgba(247, 239, 219, 0.15);
   margin-bottom: 14px;
 }
 .modal-title {
-  font-family: "Yatra One", cursive;
-  font-size: clamp(16px, 2.2vw, 20px);
   margin: 0;
+  font-size: 19px;
+  font-family: "Rozha One", Georgia, serif;
+  color: var(--white-gold);
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--white-gold);
 }
 .modal-close {
-  background: rgba(255, 255, 255, 0.12);
-  border: none;
+  background: transparent;
+  border: 0;
   color: var(--cream);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
+  font-size: 24px;
   cursor: pointer;
-  font-size: 18px;
+  opacity: 0.7;
+  padding: 4px;
   line-height: 1;
-  transition: background 0.2s, transform 0.1s;
+  border-radius: 8px;
+  transition: opacity 0.2s, background 0.2s;
 }
 .modal-close:hover {
-  background: rgba(255, 255, 255, 0.25);
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.12);
 }
 
+/* Playlist Switcher Tabs */
 .playlist-tabs {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   margin-bottom: 14px;
   overflow-x: auto;
   padding-bottom: 4px;
 }
 .tab-btn {
-  flex: 1;
-  min-width: 140px;
-  padding: 9px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(0, 0, 0, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(247, 239, 219, 0.18);
   color: var(--cream);
-  font-size: 12px;
-  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  white-space: nowrap;
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 6px;
-  white-space: nowrap;
+  transition: all 0.2s ease;
 }
 .tab-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(247, 239, 219, 0.35);
 }
 .tab-btn.active {
-  background: linear-gradient(135deg, var(--saffron), var(--saffron-deep));
-  border-color: rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-deep) 100%);
+  border-color: var(--saffron);
   color: #fff;
-  box-shadow: 0 4px 14px rgba(232, 135, 59, 0.35);
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(232, 135, 59, 0.45);
 }
 
+/* Modal Active Action Bar */
 .action-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.28);
+  padding: 10px 14px;
   border-radius: 14px;
-  padding: 10px 16px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 .playlist-info {
   display: flex;
   flex-direction: column;
 }
 .playlist-name {
-  font-weight: 700;
-  font-size: 14px;
-  color: #fff;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--white-gold);
 }
 .playlist-sub {
   font-size: 11px;
-  opacity: 0.75;
+  opacity: 0.65;
 }
 .play-main-btn {
-  background: linear-gradient(135deg, #62e28b, #38bdf8);
-  border: none;
-  color: #0f172a;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 8px 16px;
+  background: linear-gradient(135deg, #62e28b 0%, #2f9f52 100%);
+  color: #0b1a0e;
+  border: 0;
   border-radius: 999px;
+  padding: 7px 15px;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 4px 14px rgba(98, 226, 139, 0.35);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   white-space: nowrap;
 }
@@ -571,6 +536,36 @@ h1 {
   height: 330px;
   border: none;
   border-radius: 14px;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 86px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(20, 30, 20, 0.94);
+  border: 1px solid rgba(98, 226, 139, 0.4);
+  color: var(--cream);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 150;
+  pointer-events: none;
+}
+.toast.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* ─── Responsive ─── */
@@ -621,11 +616,11 @@ h1 {
   </section>
 
   <section class="player" id="player" aria-label="Independence Day music player">
-    <div class="art" id="art" style="background-image: url('https://i.ytimg.com/vi/wF_B_aBweM8/hqdefault.jpg');"></div>
+    <div class="art" id="art" style="background-image: url('https://i.ytimg.com/vi/BF2EMEoq27U/hqdefault.jpg');"></div>
 
     <div class="meta">
-      <div class="title" id="title">79th Independence Day Special</div>
-      <div class="artist" id="artist">Patriotic Mixtape · Press play 🇮🇳</div>
+      <div class="title" id="title">Teri Mitti</div>
+      <div class="artist" id="artist">B Praak · Kesari 🇮🇳</div>
       <div class="bar" id="bar"><div class="fill" id="fill"></div></div>
       <div class="time"><span id="cur">0:00</span> / <span id="dur">--:--</span></div>
     </div>
@@ -677,18 +672,18 @@ h1 {
         🇮🇳 79th Independence Special
       </button>
       <button class="tab-btn" id="tabTop250" data-key="top250">
-        🏆 Top 250 Patriotic Classics
+        🏆 Evergreen Classics
       </button>
       <button class="tab-btn" id="tabSpot2" data-key="spot2">
-        💚 Indian Patriotic Mix
+        ⚡ Modern Patriotic Mix
       </button>
     </div>
 
-    <!-- Active Playlist Action Bar (Allows transferring selected playlist to main player) -->
+    <!-- Active Playlist Action Bar -->
     <div class="action-bar">
       <div class="playlist-info">
         <span class="playlist-name" id="selectedName">79th Independence Day Special</span>
-        <span class="playlist-sub" id="selectedSub">Handpicked Patriotic Anthems · YouTube Playlist</span>
+        <span class="playlist-sub" id="selectedSub">Full Patriotic Mixtape · Iconic Hits</span>
       </div>
       <button class="play-main-btn" id="loadToMainBtn">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -707,44 +702,56 @@ h1 {
 
 <script>
 /* ─────────────────────────────────────────────
-   Playlists Catalog
+   Playlists Catalog & Direct Track Stream Queues
    ───────────────────────────────────────────── */
 const PLAYLISTS = {
   ytMain: {
     name: "79th Independence Day Special",
-    sub: "Full Patriotic Mixtape · YouTube Playlist",
-    type: "playlist",
-    playlistId: "PLHuHXHyLu7BHuVTG97_T8tlHZyZuicADr",
+    sub: "Full Patriotic Mixtape · Iconic Hits",
+    tracks: [
+      { id: "BF2EMEoq27U", title: "Teri Mitti", artist: "B Praak · Kesari" },
+      { id: "jDn2bn7_YSM", title: "Maa Tujhe Salaam (Vande Mataram)", artist: "A.R. Rahman" },
+      { id: "BKx_B1VZ2kw", title: "Ae Watan", artist: "Arijit Singh, Sunidhi Chauhan · Raazi" },
+      { id: "yccGxvIydKg", title: "Sandese Aate Hain", artist: "Sonu Nigam, Roop Kumar Rathod · Border" },
+      { id: "bnqLzCsffwY", title: "Chak De! India", artist: "Sukhwinder Singh · Chak De India" },
+      { id: "FGjQIHVUECk", title: "Kandhon Se Milte Hain Kandhe", artist: "Shankar Ehsaan Loy · Lakshya" },
+      { id: "4tiVPuLbbHg", title: "Yeh Jo Des Hai Tera", artist: "A.R. Rahman · Swades" },
+      { id: "EPHgUVqCQoM", title: "Lehra Do", artist: "Arijit Singh, Pritam · 83" },
+      { id: "7q5DUIgLs_4", title: "Bharat Humko Jaan Se Pyara Hai", artist: "Hariharan, A.R. Rahman · Roja" },
+      { id: "drlfr5Rtb1o", title: "Des Rangila", artist: "Mahalaxmi Iyer · Fanaa" }
+    ],
     embedSrc: "https://www.youtube-nocookie.com/embed/videoseries?list=PLHuHXHyLu7BHuVTG97_T8tlHZyZuicADr"
   },
   top250: {
-    name: "Top 250 Patriotic Classics",
-    sub: "Teri Mitti, Maa Tujhe Salaam, Ae Watan & more",
-    type: "videos",
-    // Top iconic Bollywood patriotic YouTube video IDs
-    videoIds: [
-      "wF_B_aBweM8", // Teri Mitti
-      "e33n3-aT7sY", // Maa Tujhe Salaam
-      "w7jWwQ7M5hY", // Ae Watan
-      "A6oB6Z_W25M"  // Kandhon Se Milte Hain Kandhe
+    name: "Evergreen Patriotic Anthems",
+    sub: "A.R. Rahman, B Praak, Sonu Nigam Classics",
+    tracks: [
+      { id: "jDn2bn7_YSM", title: "Maa Tujhe Salaam", artist: "A.R. Rahman" },
+      { id: "BF2EMEoq27U", title: "Teri Mitti", artist: "B Praak" },
+      { id: "yccGxvIydKg", title: "Sandese Aate Hain", artist: "Sonu Nigam" },
+      { id: "7q5DUIgLs_4", title: "Bharat Humko Jaan Se Pyara Hai", artist: "Hariharan" },
+      { id: "4tiVPuLbbHg", title: "Yeh Jo Des Hai Tera", artist: "A.R. Rahman" },
+      { id: "BKx_B1VZ2kw", title: "Ae Watan", artist: "Arijit Singh" }
     ],
     embedSrc: "https://open.spotify.com/embed/playlist/1uqUgrh6ZmwPyf5Rqk6KOK?utm_source=generator&theme=0"
   },
   spot2: {
-    name: "Indian Patriotic Mix",
-    sub: "Classic & Modern Patriotic Hits",
-    type: "videos",
-    videoIds: [
-      "e33n3-aT7sY", // Maa Tujhe Salaam
-      "w7jWwQ7M5hY", // Ae Watan
-      "wF_B_aBweM8", // Teri Mitti
-      "A6oB6Z_W25M"  // Kandhon Se Milte Hain Kandhe
+    name: "Modern Patriotic Mix",
+    sub: "High Energy & Inspiring Tracks",
+    tracks: [
+      { id: "EPHgUVqCQoM", title: "Lehra Do", artist: "Arijit Singh · 83" },
+      { id: "BF2EMEoq27U", title: "Teri Mitti", artist: "B Praak" },
+      { id: "bnqLzCsffwY", title: "Chak De! India", artist: "Sukhwinder Singh" },
+      { id: "FGjQIHVUECk", title: "Kandhon Se Milte Hain Kandhe", artist: "Lakshya" },
+      { id: "drlfr5Rtb1o", title: "Des Rangila", artist: "Mahalaxmi Iyer" }
     ],
     embedSrc: "https://open.spotify.com/embed/playlist/5wXRc24U6OMflqmI05RBgG?utm_source=generator&theme=0"
   }
 };
 
+let currentPlaylistKey = "ytMain";
 let currentSelectedKey = "ytMain";
+let currentTrackIdx = 0;
 
 /* ─── DOM Elements ─── */
 const titleEl      = document.getElementById("title");
@@ -792,55 +799,94 @@ function showToast(message) {
   setTimeout(() => toast.classList.remove("show"), 3200);
 }
 
-window.onYouTubeIframeAPIReady = function() {
-  player = new YT.Player("yt", {
-    height: "1",
-    width: "1",
-    playerVars: {
-      listType: "playlist",
-      list: PLAYLISTS.ytMain.playlistId,
-      controls: 0,
-      playsinline: 1,
-      rel: 0,
-      loop: 1,
-      enablejsapi: 1,
-      origin: window.location.origin
-    },
-    events: {
-      onReady: () => {
-        ready = true;
-        refreshTrack();
-        if (pendingPlay) {
-          player.setVolume(85);
-          player.playVideo();
-          pendingPlay = false;
-        }
-      },
-      onStateChange: onState,
-      onError: onError
-    }
-  });
+function updateTrackUI(track) {
+  if (!track) return;
+  titleEl.textContent = track.title;
+  artistEl.textContent = track.artist;
+  artEl.style.backgroundImage = `url(https://i.ytimg.com/vi/${track.id}/hqdefault.jpg)`;
+}
 
-  setTimeout(() => { if (!ready) showFallback(); }, 9000);
-};
+function getCurrentTrack() {
+  const list = PLAYLISTS[currentPlaylistKey]?.tracks || [];
+  return list[currentTrackIdx] || list[0];
+}
 
-function showFallback() {
-  titleEl.innerHTML = '<a href="https://music.youtube.com" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline">Open Music Player ↗</a>';
-  artistEl.textContent = "Couldn't load player API";
+function onError(e) {
+  console.warn("Track playback issue, jumping to next track...", e);
+  setTimeout(() => {
+    nextTrack();
+  }, 300);
 }
 
 function onState(e) {
   if (e.data === YT.PlayerState.PLAYING) {
     setPlaying(true);
-    refreshTrack();
+    syncCurrentTrackFromPlayer();
   } else if (e.data === YT.PlayerState.ENDED) {
-    setPlaying(false);
-    try { player.playVideoAt(0); } catch(_) {}
+    nextTrack();
   } else if (e.data === YT.PlayerState.PAUSED) {
     setPlaying(false);
   } else if (e.data === YT.PlayerState.BUFFERING) {
-    refreshTrack();
+    syncCurrentTrackFromPlayer();
   }
+}
+
+function syncCurrentTrackFromPlayer() {
+  try {
+    if (player && typeof player.getPlaylistIndex === "function") {
+      const pIdx = player.getPlaylistIndex();
+      if (typeof pIdx === "number" && pIdx >= 0) {
+        currentTrackIdx = pIdx;
+        updateTrackUI(getCurrentTrack());
+      }
+    }
+  } catch (_) {}
+}
+
+function initPlayer() {
+  if (player) return;
+  const currentList = PLAYLISTS[currentPlaylistKey]?.tracks || [];
+  const trackIds = currentList.map(t => t.id);
+  const firstId = trackIds[0] || "BF2EMEoq27U";
+
+  try {
+    player = new YT.Player("yt", {
+      height: "200",
+      width: "200",
+      videoId: firstId,
+      playerVars: {
+        playlist: trackIds.join(","),
+        controls: 0,
+        playsinline: 1,
+        rel: 0,
+        loop: 1,
+        enablejsapi: 1,
+        origin: window.location.origin
+      },
+      events: {
+        onReady: () => {
+          ready = true;
+          updateTrackUI(getCurrentTrack());
+          if (pendingPlay) {
+            player.setVolume(85);
+            player.playVideo();
+            pendingPlay = false;
+          }
+        },
+        onStateChange: onState,
+        onError: onError
+      }
+    });
+  } catch (err) {
+    console.error("Player init error:", err);
+  }
+}
+
+window.onYouTubeIframeAPIReady = initPlayer;
+
+// Initialize if API is already loaded
+if (window.YT && window.YT.Player) {
+  initPlayer();
 }
 
 function setPlaying(on) {
@@ -856,20 +902,6 @@ function setPlaying(on) {
   }
 }
 
-function refreshTrack() {
-  try {
-    const d = player.getVideoData && player.getVideoData();
-    if (!d) return;
-
-    if (d.title) titleEl.textContent = d.title;
-    if (d.author) artistEl.textContent = d.author.replace(/ - Topic$/, "");
-    if (d.video_id) {
-      artEl.style.backgroundImage =
-        `url(https://i.ytimg.com/vi/${d.video_id}/hqdefault.jpg)`;
-    }
-  } catch(_) {}
-}
-
 function tick() {
   try {
     const c  = player.getCurrentTime();
@@ -880,57 +912,56 @@ function tick() {
   } catch(_) {}
 }
 
+function playTrackAtIndex(idx) {
+  const list = PLAYLISTS[currentPlaylistKey]?.tracks || [];
+  if (idx < 0) idx = list.length - 1;
+  if (idx >= list.length) idx = 0;
+  currentTrackIdx = idx;
+  const track = list[currentTrackIdx];
+  updateTrackUI(track);
+
+  if (ready && player) {
+    try {
+      player.playVideoAt(currentTrackIdx);
+      player.playVideo();
+    } catch (_) {
+      try {
+        player.loadVideoById(track.id);
+      } catch (__) {}
+    }
+  }
+}
+
+function nextTrack() {
+  const list = PLAYLISTS[currentPlaylistKey]?.tracks || [];
+  playTrackAtIndex((currentTrackIdx + 1) % list.length);
+}
+
+function prevTrack() {
+  const list = PLAYLISTS[currentPlaylistKey]?.tracks || [];
+  playTrackAtIndex((currentTrackIdx - 1 + list.length) % list.length);
+}
+
 /* ─── Load Selected Playlist into Main Player ─── */
 function loadPlaylistToMainPlayer(key) {
-  if (!ready || !player) {
-    showToast("Player warming up... try in a second");
-    return;
-  }
-
+  currentPlaylistKey = key;
+  currentTrackIdx = 0;
   const pData = PLAYLISTS[key];
   if (!pData) return;
 
-  // Immediately set player title & thumbnail art for the new playlist
-  titleEl.textContent = pData.name;
-  artistEl.textContent = pData.sub;
+  const trackIds = pData.tracks.map(t => t.id);
+  updateTrackUI(pData.tracks[0]);
 
-  let firstVid = null;
-  if (pData.type === "videos" && pData.videoIds && pData.videoIds.length > 0) {
-    firstVid = pData.videoIds[0];
-  } else if (pData.type === "playlist") {
-    firstVid = "djV11Xbc914";
-  }
-
-  if (firstVid) {
-    artEl.style.backgroundImage = `url(https://i.ytimg.com/vi/${firstVid}/hqdefault.jpg)`;
-  }
-
-  if (pData.type === "playlist") {
-    player.loadPlaylist({
-      listType: "playlist",
-      list: pData.playlistId,
-      index: 0,
-      startSeconds: 0
-    });
-  } else if (pData.type === "videos") {
-    player.loadPlaylist(pData.videoIds, 0, 0);
-  }
-
-  player.setVolume(85);
-  player.playVideo();
-
-  // Poll refreshTrack to catch YouTube's HD video title and thumbnail when loaded
-  let checks = 0;
-  const syncTimer = setInterval(() => {
+  if (ready && player) {
     try {
-      const d = player.getVideoData && player.getVideoData();
-      if (d && d.video_id && (d.video_id === firstVid || checks > 4)) {
-        refreshTrack();
-      }
+      player.loadPlaylist(trackIds, 0, 0);
+      player.setVolume(85);
+      player.playVideo();
     } catch (_) {}
-    checks++;
-    if (checks > 12) clearInterval(syncTimer);
-  }, 300);
+  } else {
+    pendingPlay = true;
+    initPlayer();
+  }
 
   showToast(`Loaded "${pData.name}" onto Main Player!`);
   playlistModal.classList.remove("open");
@@ -940,7 +971,8 @@ function loadPlaylistToMainPlayer(key) {
 playBtn.addEventListener("click", () => {
   if (!ready) {
     pendingPlay = true;
-    titleEl.textContent = "Connecting to audio…";
+    setPlaying(true);
+    initPlayer();
     return;
   }
   if (playing) {
@@ -951,13 +983,8 @@ playBtn.addEventListener("click", () => {
   }
 });
 
-document.getElementById("next").addEventListener("click", () => {
-  if (ready) player.nextVideo();
-});
-
-document.getElementById("prev").addEventListener("click", () => {
-  if (ready) player.previousVideo();
-});
+document.getElementById("next").addEventListener("click", nextTrack);
+document.getElementById("prev").addEventListener("click", prevTrack);
 
 shuffleBtn.addEventListener("click", () => {
   if (!ready) return;
