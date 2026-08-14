@@ -679,9 +679,6 @@ h1 {
       <button class="tab-btn" id="tabSpot2" data-key="spot2">
         💚 Indian Patriotic Mix
       </button>
-      <button class="tab-btn" id="tabNostalgia" data-key="nostalgia">
-        📻 80s 90s 2000s Nostalgia
-      </button>
     </div>
 
     <!-- Active Playlist Action Bar (Allows transferring selected playlist to main player) -->
@@ -745,23 +742,6 @@ const PLAYLISTS = {
       "A6oB6Z_W25M"  // Kandhon Se Milte Hain Kandhe
     ],
     embedSrc: "https://open.spotify.com/embed/playlist/5wXRc24U6OMflqmI05RBgG?utm_source=generator&theme=0"
-  },
-  nostalgia: {
-    name: "80s 90s 2000s English Nostalgia",
-    sub: "a-ha, Oasis, Nirvana, Coldplay, The Killers & Britney",
-    type: "videos",
-    videoIds: [
-      "djV11Xbc914", // Take On Me
-      "1w7OgIMMRc4", // Sweet Child O' Mine
-      "OMOGaugKpzs", // Every Breath You Take
-      "izGwDsrQ1eU", // Careless Whisper
-      "hTWKbfoikeg", // Smells Like Teen Spirit
-      "bx1Bh8gFL08", // Wonderwall
-      "yKNxeF4KMsY", // Yellow
-      "gGdGFtwCNBE", // Mr. Brightside
-      "PWgvGjahvGE"  // Hey Ya!
-    ],
-    embedSrc: "https://www.youtube-nocookie.com/embed/watch?v=djV11Xbc914&list=RDCLAK5uy_k15B_z6M_5w"
   }
 };
 
@@ -792,8 +772,7 @@ const loadToMainBtn = document.getElementById("loadToMainBtn");
 const tabButtons = {
   ytMain: document.getElementById("tabYtMain"),
   top250: document.getElementById("tabTop250"),
-  spot2: document.getElementById("tabSpot2"),
-  nostalgia: document.getElementById("tabNostalgia")
+  spot2: document.getElementById("tabSpot2")
 };
 
 /* ─── SVG Icons ─── */
