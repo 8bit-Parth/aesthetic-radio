@@ -4,84 +4,106 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<title>Happy Independence Day · स्वतंत्रता दिवस</title>
-<meta name="description" content="कुछ गाने, कुछ यादें, और एक आज़ाद हिंदुस्तान. Press play and celebrate 15 August. 🇮🇳">
+<title>राष्ट्र ध्वनि · Rashtra Dhwani | 79th Independence Day Radio</title>
+<meta name="description" content="राष्ट्र ध्वनि (Rashtra Dhwani) — Celebrating 79 Years of Indian Independence with timeless patriotic anthems, soulful instrumentals, and historical echoes. 🇮🇳">
 <link rel="canonical" href="https://8bit-parth.github.io/aesthetic-radio/">
-<meta name="theme-color" content="#244b27">
+<meta name="theme-color" content="#1a2e1d">
 
-<!-- Social share (WhatsApp / X / iMessage) -->
-<meta property="og:site_name" content="आज़ादी के नाम">
+<!-- Social Share Tags -->
+<meta property="og:site_name" content="राष्ट्र ध्वनि · Rashtra Dhwani">
 <meta property="og:type" content="website">
-<meta property="og:title" content="आज़ादी के नाम · Happy Independence Day 🇮🇳">
-<meta property="og:description" content="कुछ गाने, कुछ यादें, और एक आज़ाद हिंदुस्तान. Press play and celebrate 15 August.">
+<meta property="og:title" content="राष्ट्र ध्वनि · Rashtra Dhwani | Patriotic Heritage Radio 🇮🇳">
+<meta property="og:description" content="धड़कनों में गूंजती आज़ादी की अमर धुनें. Stream iconic patriotic classics & anthems live.">
 <meta property="og:locale" content="en_IN">
 <meta name="twitter:card" content="summary_large_image">
 
-<!-- CDN Preconnects & Parallel API Preload -->
+<!-- CDN Preconnects & High-Speed Font / API Preload -->
 <link rel="preconnect" href="https://www.youtube.com">
 <link rel="preconnect" href="https://www.youtube-nocookie.com">
 <link rel="preconnect" href="https://i.ytimg.com">
 <link rel="preconnect" href="https://s.ytimg.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Yatra+One&display=swap" rel="stylesheet">
 <script src="https://www.youtube.com/iframe_api" async></script>
 
 <style>
 /* ─── Design Tokens ─── */
 :root {
-  --cream: #F7EFDB;
-  --saffron: #E8873B;
-  --saffron-deep: #D4702A;
-  --green: #4C7A34;
-  --green-deep: #244b27;
-  --white-gold: #fffaf0;
-  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --cream: #FAF3E0;
+  --cream-dim: rgba(250, 243, 224, 0.72);
+  --saffron: #FF7722;
+  --saffron-gold: #FFAA33;
+  --saffron-deep: #D45500;
+  --green: #138808;
+  --green-bright: #44D767;
+  --green-deep: #163319;
+  --navy: #000080;
+  --white-gold: #FFFDF9;
+  --card-bg: rgba(18, 28, 18, 0.68);
+  --card-border: rgba(255, 255, 255, 0.18);
+  --font-serif: "Playfair Display", "Cinzel", Georgia, serif;
+  --font-hindi: "Yatra One", "Playfair Display", serif;
+  --font-sans: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 /* ─── Reset ─── */
 *, *::before, *::after { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
+html, body { height: 100%; margin: 0; padding: 0; }
 body {
-  font-family: "Rozha One", Georgia, serif;
+  font-family: var(--font-sans);
   color: var(--cream);
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
-  background: var(--green-deep);
+  background: #0d1a0f;
+  user-select: none;
 }
 
-/* ─── Full-Bleed Background ─── */
-.bg {
+/* ─── Full-Bleed Dynamic Ambience Background ─── */
+.bg-layer {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background: #3f7a2f url("./background.jpg") center / cover no-repeat;
+  background: #254620 url("./background.jpg") center / cover no-repeat;
+  transition: filter 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s ease;
 }
-.bg::after {
+
+/* Ambience Presets */
+body[data-ambience="sandhya"] .bg-layer {
+  filter: brightness(0.95) saturate(1.15) contrast(1.05);
+}
+body[data-ambience="ratri"] .bg-layer {
+  filter: brightness(0.55) saturate(1.4) hue-rotate(210deg) contrast(1.15);
+}
+body[data-ambience="prabhat"] .bg-layer {
+  filter: brightness(1.1) saturate(1.25) sepia(0.12) contrast(1.02);
+}
+
+.bg-layer::after {
   content: "";
   position: absolute;
   inset: 0;
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 0, 0, 0.08) 0%,
-    rgba(0, 0, 0, 0.38) 70%,
-    rgba(0, 0, 0, 0.62) 100%
+    rgba(0, 0, 0, 0.12) 0%,
+    rgba(10, 20, 10, 0.45) 65%,
+    rgba(5, 12, 5, 0.82) 100%
   );
 }
 
-/* ─── Tricolor Ambient Top Ribbon ─── */
+/* ─── Tricolor Glowing Ambient Top Ribbon ─── */
 .ribbon {
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 3px;
+  height: 3.5px;
   background: linear-gradient(
     90deg,
-    #FF671F 0%, #FF671F 33.3%,
+    #FF7722 0%, #FF7722 33.3%,
     #FFFFFF 33.3%, #FFFFFF 66.6%,
-    #046A38 66.6%, #046A38 100%
+    #138808 66.6%, #138808 100%
   );
-  z-index: 20;
-  box-shadow: 0 0 16px rgba(255, 103, 31, 0.75), 0 0 24px rgba(4, 106, 56, 0.75);
+  z-index: 40;
+  box-shadow: 0 0 18px rgba(255, 119, 34, 0.8), 0 0 24px rgba(19, 136, 8, 0.8);
 }
 
 /* ─── Layout Shell ─── */
@@ -92,7 +114,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 24px 28px 20px;
+  padding: 20px 28px 16px;
   box-sizing: border-box;
 }
 
@@ -101,34 +123,92 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: var(--sans);
-  font-size: 13px;
-  letter-spacing: .02em;
+  gap: 12px;
+  z-index: 10;
 }
-.pill {
+
+.brand-pill {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  background: rgba(20, 35, 20, 0.45);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(247, 239, 219, 0.22);
+  gap: 8px;
+  background: rgba(14, 26, 16, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--card-border);
   padding: 6px 14px;
   border-radius: 999px;
-  color: var(--cream);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white-gold);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
 }
-.dot {
-  width: 7px;
-  height: 7px;
+.dot-live {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #62e28b;
-  box-shadow: 0 0 8px #62e28b;
-  animation: pulse 2s ease-in-out infinite;
+  background: var(--green-bright);
+  box-shadow: 0 0 10px var(--green-bright);
+  animation: pulseLive 2s ease-in-out infinite;
 }
-@keyframes pulse {
+@keyframes pulseLive {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(0.85); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* Ambience Theme Switcher */
+.ambience-picker {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(14, 26, 16, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--card-border);
+  padding: 3px;
+  border-radius: 999px;
+  gap: 3px;
+}
+.amb-btn {
+  background: transparent;
+  border: 0;
+  color: var(--cream-dim);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 5px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.25s ease;
+}
+.amb-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+.amb-btn.active {
+  background: linear-gradient(135deg, rgba(255, 119, 34, 0.85) 0%, rgba(212, 85, 0, 0.85) 100%);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(255, 119, 34, 0.4);
+}
+
+.top-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.diya-pill {
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.2s ease;
+}
+.diya-pill:hover {
+  transform: scale(1.05);
+  background: rgba(255, 119, 34, 0.25);
+  border-color: rgba(255, 170, 51, 0.5);
+}
+.diya-pill:active {
+  transform: scale(0.96);
 }
 
 /* ─── Floating Tricolor Balloons & Accents ─── */
@@ -145,128 +225,187 @@ body {
   opacity: 0;
   pointer-events: none;
   animation: floatUpBalloon linear infinite;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
 }
 @keyframes floatUpBalloon {
-  0% {
-    transform: translateY(0) translateX(0) rotate(0deg);
-    opacity: 0;
-  }
-  8% {
-    opacity: 0.85;
-  }
-  25% {
-    transform: translateY(-28vh) translateX(14px) rotate(4deg);
-  }
-  50% {
-    transform: translateY(-58vh) translateX(-14px) rotate(-4deg);
-  }
-  75% {
-    transform: translateY(-88vh) translateX(10px) rotate(3deg);
-  }
-  90% {
-    opacity: 0.85;
-  }
-  100% {
-    transform: translateY(-118vh) translateX(-8px) rotate(-3deg);
-    opacity: 0;
-  }
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  8% { opacity: 0.85; }
+  25% { transform: translateY(-28vh) translateX(14px) rotate(4deg); }
+  50% { transform: translateY(-58vh) translateX(-14px) rotate(-4deg); }
+  75% { transform: translateY(-88vh) translateX(10px) rotate(3deg); }
+  90% { opacity: 0.85; }
+  100% { transform: translateY(-118vh) translateX(-8px) rotate(-3deg); opacity: 0; }
 }
 
 /* ─── Hero Section ─── */
 .hero {
   text-align: center;
   margin: auto 0;
-  padding: 0 16px 40px;
+  padding: 0 16px 20px;
+  position: relative;
+  z-index: 5;
 }
-.kicker {
-  font-family: "Yatra One", "Rozha One", serif;
-  font-size: clamp(13px, 1.9vw, 17px);
-  color: var(--saffron);
-  letter-spacing: .18em;
+.kicker-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 119, 34, 0.16);
+  border: 1px solid rgba(255, 170, 51, 0.4);
+  color: var(--saffron-gold);
+  font-family: var(--font-sans);
+  font-size: clamp(11px, 1.3vw, 13px);
+  font-weight: 600;
+  letter-spacing: .16em;
   text-transform: uppercase;
-  margin: 0 0 10px;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+  padding: 5px 16px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
 }
 h1 {
-  font-family: "Rozha One", "Yatra One", Georgia, serif;
+  font-family: var(--font-hindi);
   font-weight: 400;
-  font-size: clamp(44px, 7.5vw, 96px);
+  font-size: clamp(48px, 8vw, 104px);
   line-height: 1.02;
-  margin: 0 0 12px;
+  margin: 0 0 8px;
   color: var(--white-gold);
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
   text-shadow:
-    0 4px 28px rgba(0, 0, 0, 0.65),
-    0 1px 3px rgba(0, 0, 0, 0.9);
+    0 4px 30px rgba(0, 0, 0, 0.7),
+    0 1px 4px rgba(0, 0, 0, 0.95);
 }
-.hindi {
-  font-family: "Yatra One", "Rozha One", serif;
-  font-size: clamp(16px, 2.4vw, 24px);
+.tagline-sub {
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 2.3vw, 24px);
+  font-style: italic;
   margin: 0 0 8px;
   color: var(--cream);
-  opacity: 0.94;
+  opacity: 0.92;
   text-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
 }
-.sub {
-  font-family: var(--sans);
-  font-size: clamp(12px, 1.4vw, 15px);
-  color: var(--cream);
-  opacity: 0.78;
-  margin: 0;
-  letter-spacing: .03em;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+.frequency-banner {
+  font-family: var(--font-sans);
+  font-size: clamp(11.5px, 1.3vw, 14px);
+  color: var(--cream-dim);
+  letter-spacing: .06em;
+  margin: 0 0 16px;
 }
 
-/* ─── Compact Player ─── */
-.player {
+/* Quote Ticker */
+.quote-box {
+  max-width: 600px;
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 6px 18px;
+  font-size: clamp(11px, 1.2vw, 12.5px);
+  color: var(--cream);
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.4s ease;
+}
+
+/* ─── Bespoke Radio Console Player ─── */
+.radio-console {
   position: relative;
   align-self: center;
   width: 100%;
-  max-width: 580px;
-  background: rgba(18, 28, 16, 0.62);
-  backdrop-filter: blur(28px) saturate(160%);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  border: 1px solid rgba(247, 239, 219, 0.25);
+  max-width: 620px;
+  background: var(--card-bg);
+  backdrop-filter: blur(32px) saturate(170%);
+  -webkit-backdrop-filter: blur(32px) saturate(170%);
+  border: 1px solid var(--card-border);
   box-shadow:
-    0 18px 45px rgba(0, 0, 0, 0.55),
-    0 2px 6px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  border-radius: 26px;
-  padding: 10px 14px 10px 10px;
+    0 24px 60px rgba(0, 0, 0, 0.65),
+    0 4px 10px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  border-radius: 28px;
+  padding: 12px 16px 12px 12px;
   display: flex;
   align-items: center;
   gap: 14px;
   margin-bottom: 8px;
+  z-index: 10;
 }
 
-.art {
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
-  background: #182614 url("https://i.ytimg.com/vi/BF2EMEoq27U/hqdefault.jpg") center/cover no-repeat;
+/* Cover Art with Glowing Halo */
+.art-wrapper {
+  position: relative;
   flex-shrink: 0;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.art {
+  width: 68px;
+  height: 68px;
+  border-radius: 18px;
+  background: #182614 url("https://i.ytimg.com/vi/BF2EMEoq27U/hqdefault.jpg") center/cover no-repeat;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   position: relative;
   overflow: hidden;
-  transition: background-image 0.25s ease;
+  transition: background-image 0.25s ease, transform 0.25s ease;
 }
 .art::after {
   content: "";
   position: absolute;
   inset: 0;
-  box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.35);
 }
 
-.meta {
+/* Metadata & Visualizer Info */
+.meta-pane {
   flex: 1;
   min-width: 0;
-  font-family: var(--sans);
+  display: flex;
+  flex-direction: column;
 }
+.meta-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.station-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--saffron-gold);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Equalizer Bars */
+.eq-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 12px;
+}
+.eq-bar {
+  width: 2.5px;
+  background: var(--saffron-gold);
+  border-radius: 2px;
+  height: 3px;
+  transition: height 0.15s ease;
+}
+.radio-console.playing .eq-bar:nth-child(1) { animation: eqJump 0.6s ease infinite alternate; }
+.radio-console.playing .eq-bar:nth-child(2) { animation: eqJump 0.45s ease infinite alternate 0.15s; background: #fff; }
+.radio-console.playing .eq-bar:nth-child(3) { animation: eqJump 0.7s ease infinite alternate 0.05s; background: var(--green-bright); }
+.radio-console.playing .eq-bar:nth-child(4) { animation: eqJump 0.5s ease infinite alternate 0.2s; background: var(--saffron-gold); }
+@keyframes eqJump {
+  0% { height: 3px; }
+  100% { height: 12px; }
+}
+
 .title {
   font-weight: 600;
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--white-gold);
   white-space: nowrap;
   overflow: hidden;
@@ -276,41 +415,40 @@ h1 {
 }
 .artist {
   font-size: 11.5px;
-  color: var(--cream);
-  opacity: 0.72;
+  color: var(--cream-dim);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 7px;
 }
 
-.bar {
-  height: 4px;
-  background: rgba(247, 239, 219, 0.2);
+/* Progress Scrubber */
+.bar-track {
+  height: 4.5px;
+  background: rgba(255, 255, 255, 0.16);
   border-radius: 999px;
   overflow: hidden;
   cursor: pointer;
   position: relative;
 }
-.fill {
+.bar-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--saffron) 0%, #ffaa5b 100%);
+  background: linear-gradient(90deg, var(--saffron) 0%, var(--saffron-gold) 100%);
   border-radius: 999px;
-  box-shadow: 0 0 10px rgba(232, 135, 59, 0.85);
+  box-shadow: 0 0 10px rgba(255, 119, 34, 0.85);
   transition: width 0.25s linear;
 }
-.time {
+.time-row {
   display: flex;
   justify-content: space-between;
-  font-size: 9.5px;
-  color: var(--cream);
-  opacity: 0.6;
+  font-size: 10px;
+  color: var(--cream-dim);
   margin-top: 4px;
   font-variant-numeric: tabular-nums;
 }
 
-/* ─── Controls ─── */
+/* ─── Player Controls ─── */
 .controls {
   display: flex;
   align-items: center;
@@ -339,45 +477,43 @@ h1 {
 .ctrl:active {
   transform: scale(0.94);
 }
-.ctrl svg {
-  width: 17px;
-  height: 17px;
-}
+.ctrl svg { width: 17px; height: 17px; }
 
 .ctrl.shuffle.on {
-  color: var(--saffron);
+  color: var(--saffron-gold);
   opacity: 1;
 }
 
 .ctrl.play {
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
   background: linear-gradient(135deg, #ffffff 0%, var(--cream) 100%);
-  color: #1a2a16;
+  color: #122112;
   opacity: 1;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 18px rgba(247, 239, 219, 0.35);
-  margin: 0 3px;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45), 0 0 18px rgba(255, 255, 255, 0.4);
+  margin: 0 2px;
 }
 .ctrl.play:hover {
   background: #ffffff;
   transform: scale(1.09);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 24px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55), 0 0 24px rgba(255, 255, 255, 0.65);
 }
-.ctrl.play svg { width: 22px; height: 22px; }
+.ctrl.play svg { width: 23px; height: 23px; }
 
 /* ─── Footer ─── */
 .footer {
   position: absolute;
-  bottom: 15px;
+  bottom: 12px;
   left: 0; right: 0;
   text-align: center;
-  font-family: var(--sans);
-  font-size: 10px;
-  opacity: .58;
+  font-size: 11px;
+  color: var(--cream-dim);
+  opacity: .65;
+  letter-spacing: .04em;
   pointer-events: none;
 }
 
-/* ─── Hidden YouTube Player ─── */
+/* ─── Hidden YouTube Player Stream ─── */
 #yt {
   position: fixed;
   top: -9999px;
@@ -388,14 +524,14 @@ h1 {
   pointer-events: none;
 }
 
-/* ─── In-Site Playlist Modal / Overlay ─── */
+/* ─── In-Site Playlist Modal / Hub ─── */
 .modal-overlay {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(10, 15, 10, 0.78);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgba(8, 14, 8, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -412,16 +548,15 @@ h1 {
   position: relative;
   width: min(720px, 95vw);
   max-height: 88vh;
-  background: rgba(24, 30, 22, 0.92);
-  border: 1px solid rgba(247, 239, 219, 0.25);
+  background: rgba(20, 32, 20, 0.94);
+  border: 1px solid var(--card-border);
   border-radius: 24px;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
   padding: 22px;
   display: flex;
   flex-direction: column;
   transform: translateY(20px) scale(0.97);
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: var(--sans);
   color: var(--cream);
   overflow: hidden;
 }
@@ -433,13 +568,13 @@ h1 {
   align-items: center;
   justify-content: space-between;
   padding-bottom: 14px;
-  border-bottom: 1px solid rgba(247, 239, 219, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   margin-bottom: 14px;
 }
 .modal-title {
   margin: 0;
   font-size: 19px;
-  font-family: "Rozha One", Georgia, serif;
+  font-family: var(--font-hindi);
   color: var(--white-gold);
   display: flex;
   align-items: center;
@@ -462,7 +597,6 @@ h1 {
   background: rgba(255, 255, 255, 0.12);
 }
 
-/* Playlist Switcher Tabs */
 .playlist-tabs {
   display: flex;
   gap: 8px;
@@ -472,7 +606,7 @@ h1 {
 }
 .tab-btn {
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(247, 239, 219, 0.18);
+  border: 1px solid var(--card-border);
   color: var(--cream);
   padding: 8px 14px;
   border-radius: 999px;
@@ -487,22 +621,21 @@ h1 {
 }
 .tab-btn:hover {
   background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(247, 239, 219, 0.35);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 .tab-btn.active {
   background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-deep) 100%);
   border-color: var(--saffron);
   color: #fff;
   font-weight: 600;
-  box-shadow: 0 4px 14px rgba(232, 135, 59, 0.45);
+  box-shadow: 0 4px 14px rgba(255, 119, 34, 0.45);
 }
 
-/* Modal Active Action Bar */
 .action-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(0, 0, 0, 0.28);
+  background: rgba(0, 0, 0, 0.32);
   padding: 10px 14px;
   border-radius: 14px;
   margin-bottom: 14px;
@@ -565,12 +698,11 @@ h1 {
   bottom: 86px;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background: rgba(20, 30, 20, 0.94);
+  background: rgba(18, 30, 18, 0.95);
   border: 1px solid rgba(98, 226, 139, 0.4);
   color: var(--cream);
   padding: 10px 18px;
   border-radius: 999px;
-  font-family: var(--sans);
   font-size: 12.5px;
   font-weight: 500;
   display: flex;
@@ -590,60 +722,96 @@ h1 {
 }
 
 /* ─── Responsive ─── */
-@media (max-width: 560px) {
+@media (max-width: 600px) {
   .shell { padding: 12px; }
-  .player { gap: 9px; padding: 8px 10px 8px 8px; border-radius: 20px; }
-  .art { width: 58px; height: 58px; border-radius: 12px; }
+  .topbar { flex-wrap: wrap; justify-content: space-between; }
+  .ambience-picker { order: 3; width: 100%; justify-content: center; margin-top: 4px; }
+  .radio-console { gap: 10px; padding: 8px 10px 8px 8px; border-radius: 20px; }
+  .art { width: 56px; height: 56px; border-radius: 14px; }
   .ctrl.shuffle { display: none; }
   .ctrl { width: 34px; height: 34px; }
   .ctrl.play { width: 44px; height: 44px; }
-  .hero { padding-bottom: 70px; }
-  .kicker { letter-spacing: .12em; }
+  .hero { padding-bottom: 40px; }
   .modal-content { padding: 16px; border-radius: 18px; }
   .modal-body iframe { height: 280px; }
   .action-bar { flex-direction: column; align-items: stretch; gap: 8px; text-align: center; }
   .play-main-btn { justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .dot { animation: none; }
+  .dot-live { animation: none; }
   .particle { animation: none; display: none; }
 }
 </style>
 </head>
 
-<body>
+<body data-ambience="sandhya">
 <div class="ribbon"></div>
-<div class="bg"></div>
+<div class="bg-layer" id="bgLayer"></div>
 
 <!-- Toast notification -->
 <div class="toast" id="toast">
-  <span>🎵</span> <span id="toastMsg">Loaded playlist to Main Player!</span>
+  <span>🎵</span> <span id="toastMsg">Loaded playlist onto Radio!</span>
 </div>
 
-<!-- Floating flag particles -->
+<!-- Floating Tricolor Balloons -->
 <div class="particles" id="particles"></div>
 
 <div class="shell">
+  <!-- Top Bar with Ambience & Tribute Features -->
   <header class="topbar">
-    <span class="pill"><span class="dot"></span><b id="listeners">1</b>&nbsp;celebrating live</span>
-    <span class="pill"><span class="clock" id="clock">--:--</span></span>
+    <div class="brand-pill">
+      <span class="dot-live"></span>
+      <span><b id="listeners">1</b> listening live</span>
+    </div>
+
+    <!-- Ambience Mood Selector -->
+    <div class="ambience-picker" role="radiogroup" aria-label="Ambience theme selector">
+      <button class="amb-btn active" data-amb="sandhya" title="Golden Sunset">🌅 Sandhya</button>
+      <button class="amb-btn" data-amb="ratri" title="Midnight Tricolor">🌌 Ratri</button>
+      <button class="amb-btn" data-amb="prabhat" title="Morning Dawn">🌄 Prabhat</button>
+    </div>
+
+    <div class="top-actions">
+      <button class="brand-pill diya-pill" id="diyaBtn" title="Light a Tribute Diya">
+        <span>🪔</span> <b id="diyaCount">1,947</b>
+      </button>
+      <span class="brand-pill"><span id="clock">--:--</span></span>
+    </div>
   </header>
 
+  <!-- Hero Branding -->
   <section class="hero">
-    <p class="kicker">स्वतंत्रता दिवस की शुभकामनाएं</p>
-    <h1>आज़ादी के नाम</h1>
-    <p class="hindi">कुछ गाने, कुछ यादें, और एक आज़ाद हिंदुस्तान</p>
-    <p class="sub">15 August 2026 · Press play. Listen a while. 🇮🇳</p>
+    <div class="kicker-badge">✦ 79th Independence Day Edition ✦</div>
+    <h1>राष्ट्र ध्वनि</h1>
+    <p class="tagline-sub">Echoes of India · The Soul of Freedom</p>
+    <div class="frequency-banner">94.7 FM &bull; 15 August 2026 &bull; Timeless Patriotic Radio 🇮🇳</div>
+    
+    <!-- Rotating Inspiring Quotes Ticker -->
+    <div class="quote-box" id="quoteTicker">
+      "स्वतंत्रता हमारा जन्मसिद्ध अधिकार है और हम इसे लेकर रहेंगे।" — लोकमान्य तिलक
+    </div>
   </section>
 
-  <section class="player" id="player" aria-label="Independence Day music player">
-    <div class="art" id="art" style="background-image: url('https://i.ytimg.com/vi/BF2EMEoq27U/hqdefault.jpg');"></div>
+  <!-- Bespoke Glassmorphic Radio Console -->
+  <section class="radio-console" id="radioConsole" aria-label="Rashtra Dhwani Radio Player">
+    <div class="art-wrapper">
+      <div class="art" id="art" style="background-image: url('https://i.ytimg.com/vi/BF2EMEoq27U/hqdefault.jpg');"></div>
+    </div>
 
-    <div class="meta">
+    <div class="meta-pane">
+      <div class="meta-header">
+        <span class="station-tag" id="stationTag">🔴 LIVE 94.7 FM &bull; Rashtra Dhwani</span>
+        <div class="eq-bars">
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+        </div>
+      </div>
       <div class="title" id="title">Teri Mitti</div>
       <div class="artist" id="artist">B Praak · Kesari 🇮🇳</div>
-      <div class="bar" id="bar"><div class="fill" id="fill"></div></div>
-      <div class="time"><span id="cur">0:00</span> / <span id="dur">--:--</span></div>
+      <div class="bar-track" id="bar"><div class="bar-fill" id="fill"></div></div>
+      <div class="time-row"><span id="cur">0:00</span> / <span id="dur">--:--</span></div>
     </div>
 
     <div class="controls">
@@ -653,7 +821,7 @@ h1 {
         </svg>
       </button>
 
-      <button class="ctrl" id="prev" aria-label="Previous">
+      <button class="ctrl" id="prev" aria-label="Previous Track">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg>
       </button>
 
@@ -661,11 +829,11 @@ h1 {
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
       </button>
 
-      <button class="ctrl" id="next" aria-label="Next">
+      <button class="ctrl" id="next" aria-label="Next Track">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5l11 7L4 19z"/></svg>
       </button>
 
-      <button class="ctrl queue" id="queue" aria-label="Open playlist hub on this site">
+      <button class="ctrl queue" id="queue" aria-label="Open Station & Playlist Hub">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <path d="M4 6h16M4 12h10M4 18h10"/>
           <path d="M17 14v6l5-3z" fill="currentColor" stroke="none"/>
@@ -674,46 +842,45 @@ h1 {
     </div>
   </section>
 
-  <div class="footer">Made for a free India · 🇮🇳</div>
+  <div class="footer">राष्ट्र ध्वनि &bull; Celebrating the Eternal Spirit of India &bull; 🇮🇳</div>
 </div>
 
-<!-- ─── In-Site Playlist Hub Modal ─── -->
+<!-- ─── In-Site Playlist & Radio Stations Hub ─── -->
 <div class="modal-overlay" id="playlistModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-content">
     <div class="modal-header">
       <h3 class="modal-title" id="modalTitle">
-        <span>🇮🇳</span> Patriotic Playlist Hub
+        <span>🇮🇳</span> Rashtra Dhwani &bull; Stations Hub
       </h3>
       <button class="modal-close" id="modalCloseBtn" aria-label="Close modal">&times;</button>
     </div>
     
-    <!-- Playlist Selector Tabs -->
+    <!-- Station Selector Tabs -->
     <div class="playlist-tabs">
       <button class="tab-btn active" id="tabYtMain" data-key="ytMain">
-        🇮🇳 79th Independence Special
+        🇮🇳 94.7 FM &bull; Rashtra Dhwani
       </button>
       <button class="tab-btn" id="tabTop250" data-key="top250">
-        🏆 Evergreen Classics
+        🏆 102.4 FM &bull; Evergreen Classics
       </button>
       <button class="tab-btn" id="tabSpot2" data-key="spot2">
-        ⚡ Modern Patriotic Mix
+        ⚡ 88.5 FM &bull; High Energy Tributes
       </button>
     </div>
 
-    <!-- Active Playlist Action Bar -->
+    <!-- Active Station Action Bar -->
     <div class="action-bar">
       <div class="playlist-info">
-        <span class="playlist-name" id="selectedName">79th Independence Day Special</span>
-        <span class="playlist-sub" id="selectedSub">Full Patriotic Mixtape · Iconic Hits</span>
+        <span class="playlist-name" id="selectedName">94.7 FM &bull; Rashtra Dhwani Special</span>
+        <span class="playlist-sub" id="selectedSub">Iconic Patriotic Anthems · Full Stream</span>
       </div>
       <button class="play-main-btn" id="loadToMainBtn">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        Play on Main Player
+        Tune In on Main Radio
       </button>
     </div>
 
     <div class="modal-body" id="modalBody">
-      <!-- Embedded iframe preview -->
       <iframe id="playlistEmbed" src="https://www.youtube-nocookie.com/embed/videoseries?list=PLHuHXHyLu7BHuVTG97_T8tlHZyZuicADr" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
     </div>
   </div>
@@ -723,12 +890,13 @@ h1 {
 
 <script>
 /* ─────────────────────────────────────────────
-   Playlists Catalog & Direct Track Stream Queues
+   Playlists Catalog & Direct Stream Queues (100% Stable)
    ───────────────────────────────────────────── */
 const PLAYLISTS = {
   ytMain: {
-    name: "79th Independence Day Special",
-    sub: "Full Patriotic Mixtape · Iconic Hits",
+    name: "94.7 FM · Rashtra Dhwani Special",
+    sub: "Iconic Patriotic Anthems · Full Stream",
+    stationLabel: "🔴 LIVE 94.7 FM • Rashtra Dhwani",
     tracks: [
       { id: "BF2EMEoq27U", title: "Teri Mitti", artist: "B Praak · Kesari" },
       { id: "jDn2bn7_YSM", title: "Maa Tujhe Salaam (Vande Mataram)", artist: "A.R. Rahman" },
@@ -744,8 +912,9 @@ const PLAYLISTS = {
     embedSrc: "https://www.youtube-nocookie.com/embed/videoseries?list=PLHuHXHyLu7BHuVTG97_T8tlHZyZuicADr"
   },
   top250: {
-    name: "Evergreen Patriotic Anthems",
+    name: "102.4 FM · Evergreen Classics",
     sub: "A.R. Rahman, B Praak, Sonu Nigam Classics",
+    stationLabel: "🔴 LIVE 102.4 FM • Evergreen Classics",
     tracks: [
       { id: "jDn2bn7_YSM", title: "Maa Tujhe Salaam", artist: "A.R. Rahman" },
       { id: "BF2EMEoq27U", title: "Teri Mitti", artist: "B Praak" },
@@ -757,8 +926,9 @@ const PLAYLISTS = {
     embedSrc: "https://open.spotify.com/embed/playlist/1uqUgrh6ZmwPyf5Rqk6KOK?utm_source=generator&theme=0"
   },
   spot2: {
-    name: "Modern Patriotic Mix",
+    name: "88.5 FM · High Energy Tributes",
     sub: "High Energy & Inspiring Tracks",
+    stationLabel: "🔴 LIVE 88.5 FM • High Energy Tributes",
     tracks: [
       { id: "EPHgUVqCQoM", title: "Lehra Do", artist: "Arijit Singh · 83" },
       { id: "BF2EMEoq27U", title: "Teri Mitti", artist: "B Praak" },
@@ -786,6 +956,8 @@ const durEl        = document.getElementById("dur");
 const shuffleBtn   = document.getElementById("shuffle");
 const toast        = document.getElementById("toast");
 const toastMsg     = document.getElementById("toastMsg");
+const radioConsole = document.getElementById("radioConsole");
+const stationTag   = document.getElementById("stationTag");
 
 /* ─── Modal Elements ─── */
 const playlistModal = document.getElementById("playlistModal");
@@ -825,6 +997,11 @@ function updateTrackUI(track) {
   titleEl.textContent = track.title;
   artistEl.textContent = track.artist;
   artEl.style.backgroundImage = `url(https://i.ytimg.com/vi/${track.id}/hqdefault.jpg)`;
+  
+  const currentP = PLAYLISTS[currentPlaylistKey];
+  if (currentP && currentP.stationLabel) {
+    stationTag.textContent = currentP.stationLabel;
+  }
 }
 
 function getCurrentTrack() {
@@ -833,7 +1010,7 @@ function getCurrentTrack() {
 }
 
 function onError(e) {
-  console.warn("Track playback issue, jumping to next track...", e);
+  console.warn("Track playback issue, advancing to next...", e);
   setTimeout(() => {
     nextTrack();
   }, 300);
@@ -914,6 +1091,7 @@ function setPlaying(on) {
   playing = on;
   playBtn.innerHTML = on ? ICON_PAUSE : ICON_PLAY;
   playBtn.setAttribute("aria-label", on ? "Pause" : "Play");
+  radioConsole.classList.toggle("playing", on);
 
   if (on) {
     poll = poll || setInterval(tick, 250);
@@ -963,7 +1141,7 @@ function prevTrack() {
   playTrackAtIndex((currentTrackIdx - 1 + list.length) % list.length);
 }
 
-/* ─── Load Selected Playlist into Main Player ─── */
+/* ─── Load Selected Station onto Main Console ─── */
 function loadPlaylistToMainPlayer(key) {
   currentPlaylistKey = key;
   currentTrackIdx = 0;
@@ -984,7 +1162,7 @@ function loadPlaylistToMainPlayer(key) {
     initPlayer();
   }
 
-  showToast(`Loaded "${pData.name}" onto Main Player!`);
+  showToast(`Tuned into ${pData.name}!`);
   playlistModal.classList.remove("open");
 }
 
@@ -1057,6 +1235,60 @@ bar.addEventListener("click", e => {
   const du = player.getDuration();
   if (du) player.seekTo((e.clientX - r.left) / r.width * du, true);
 });
+
+/* ─── Ambience Theme Switcher ─── */
+const ambButtons = document.querySelectorAll(".amb-btn");
+ambButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const amb = btn.getAttribute("data-amb");
+    document.body.setAttribute("data-ambience", amb);
+    ambButtons.forEach(b => b.classList.toggle("active", b === btn));
+    showToast(`Atmosphere set to ${btn.textContent.trim()}`);
+  });
+});
+
+/* ─── Light a Diya Tribute Widget ─── */
+(function() {
+  const diyaBtn = document.getElementById("diyaBtn");
+  const countEl = document.getElementById("diyaCount");
+  
+  let currentDiyas = parseInt(localStorage.getItem("rashtra_diya_count") || "1947", 10);
+  countEl.textContent = currentDiyas.toLocaleString("en-IN");
+
+  diyaBtn.addEventListener("click", () => {
+    currentDiyas++;
+    countEl.textContent = currentDiyas.toLocaleString("en-IN");
+    localStorage.setItem("rashtra_diya_count", String(currentDiyas));
+    showToast("🪔 Tribute Diya lit with pride & honour!");
+
+    // Little celebratory burst
+    diyaBtn.style.transform = "scale(1.2)";
+    setTimeout(() => { diyaBtn.style.transform = ""; }, 220);
+  });
+})();
+
+/* ─── Freedom Quotes Rotator ─── */
+(function() {
+  const quotes = [
+    '"स्वतंत्रता हमारा जन्मसिद्ध अधिकार है और हम इसे लेकर रहेंगे।" — लोकमान्य तिलक',
+    '"सरफ़रोशी की तमन्ना अब हमारे दिल में है, देखना है ज़ोर कितना बाज़ू-ए-कातिल में है।" — रामप्रसाद बिस्मिल',
+    '"तुम मुझे खून दो, मैं तुम्हें आज़ादी दूंगा!" — नेताजी सुभाष चंद्र बोस',
+    '"Where the mind is without fear and the head is held high..." — Rabindranath Tagore',
+    '"इंक़लाब ज़िंदाबाद!" — भगत सिंह',
+    '"A country\'s greatness lies in its undying ideals of love and sacrifice." — Sarojini Naidu'
+  ];
+  let qIdx = 0;
+  const el = document.getElementById("quoteTicker");
+  
+  setInterval(() => {
+    el.style.opacity = "0";
+    setTimeout(() => {
+      qIdx = (qIdx + 1) % quotes.length;
+      el.textContent = quotes[qIdx];
+      el.style.opacity = "0.85";
+    }, 400);
+  }, 7500);
+})();
 
 /* ─── Local Clock ─── */
 (function() {
