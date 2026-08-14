@@ -17,10 +17,13 @@
 <meta property="og:locale" content="en_IN">
 <meta name="twitter:card" content="summary_large_image">
 
-<!-- Fonts -->
+<!-- CDN Preconnects for Instant Loading -->
+<link rel="preconnect" href="https://www.youtube.com">
+<link rel="preconnect" href="https://i.ytimg.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
+<script src="https://www.youtube.com/iframe_api" async></script>
 
 <style>
 /* ─── Design Tokens ─── */
@@ -618,13 +621,13 @@ h1 {
   </section>
 
   <section class="player" id="player" aria-label="Independence Day music player">
-    <div class="art" id="art"></div>
+    <div class="art" id="art" style="background-image: url('https://i.ytimg.com/vi/wF_B_aBweM8/hqdefault.jpg');"></div>
 
     <div class="meta">
-      <div class="title" id="title">Loading the playlist…</div>
-      <div class="artist" id="artist">Independence Day mixtape</div>
+      <div class="title" id="title">79th Independence Day Special</div>
+      <div class="artist" id="artist">Patriotic Mixtape · Press play 🇮🇳</div>
       <div class="bar" id="bar"><div class="fill" id="fill"></div></div>
-      <div class="time"><span id="cur">0:00</span> / <span id="dur">0:00</span></div>
+      <div class="time"><span id="cur">0:00</span> / <span id="dur">--:--</span></div>
     </div>
 
     <div class="controls">
@@ -775,7 +778,7 @@ const tabButtons = {
 const ICON_PLAY  = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
 const ICON_PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
 
-let player = null, ready = false, playing = false, shuffled = false, poll = null;
+let player = null, ready = false, playing = false, shuffled = false, poll = null, pendingPlay = false;
 
 /* ─── Utilities ─── */
 const fmt = s => {
@@ -788,13 +791,6 @@ function showToast(message) {
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 3200);
 }
-
-/* ─── Load YouTube IFrame API ─── */
-(function() {
-  const s = document.createElement("script");
-  s.src = "https://www.youtube.com/iframe_api";
-  document.head.appendChild(s);
-})();
 
 window.onYouTubeIframeAPIReady = function() {
   player = new YT.Player("yt", {
@@ -811,8 +807,12 @@ window.onYouTubeIframeAPIReady = function() {
     events: {
       onReady: () => {
         ready = true;
-        titleEl.textContent = "Press play →";
         refreshTrack();
+        if (pendingPlay) {
+          player.setVolume(85);
+          player.playVideo();
+          pendingPlay = false;
+        }
       },
       onStateChange: onState,
       onError: onError
@@ -937,7 +937,8 @@ function loadPlaylistToMainPlayer(key) {
 /* ─── Controls & Handlers ─── */
 playBtn.addEventListener("click", () => {
   if (!ready) {
-    titleEl.textContent = "Warming up…";
+    pendingPlay = true;
+    titleEl.textContent = "Connecting to audio…";
     return;
   }
   if (playing) {
