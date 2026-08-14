@@ -24,8 +24,10 @@
 <link rel="preconnect" href="https://s.ytimg.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Yatra+One&display=swap" rel="stylesheet">
 <script src="https://www.youtube.com/iframe_api" async></script>
+<!-- Real-Time Global Presence Engine (Firebase) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <style>
 /* ─── Design Tokens ─── */
@@ -1431,23 +1433,95 @@ bar.addEventListener("click", e => {
   if (du) player.seekTo((e.clientX - r.left) / r.width * du, true);
 });
 
-/* ─── Light a Diya Tribute Widget ─── */
+/* ─── Real-Time Global Firebase Presence & Tribute Sync ─── */
 (function() {
-  const diyaBtn = document.getElementById("diyaBtn");
-  const countEl = document.getElementById("diyaCount");
-  
-  let currentDiyas = parseInt(localStorage.getItem("rashtra_diya_count") || "1947", 10);
-  countEl.textContent = currentDiyas.toLocaleString("en-IN");
+  const listenersEl = document.getElementById("listeners");
+  const diyaCountEl = document.getElementById("diyaCount");
+  const diyaBtn     = document.getElementById("diyaBtn");
 
-  diyaBtn.addEventListener("click", () => {
-    currentDiyas++;
-    countEl.textContent = currentDiyas.toLocaleString("en-IN");
-    localStorage.setItem("rashtra_diya_count", String(currentDiyas));
-    showToast("🪔 Tribute Diya lit with pride & honour!");
+  const firebaseConfig = {
+    apiKey: "AIzaSyD6hi96mchknzywnPiQzo84NmG0I5Z5tMQ",
+    authDomain: "rashtra-dhwani-radio-992de.firebaseapp.com",
+    databaseURL: "https://rashtra-dhwani-radio-992de-default-rtdb.firebaseio.com",
+    projectId: "rashtra-dhwani-radio-992de",
+    storageBucket: "rashtra-dhwani-radio-992de.firebasestorage.app",
+    messagingSenderId: "931793498448",
+    appId: "1:931793498448:web:47fc05027628fc5b427c55"
+  };
 
-    diyaBtn.style.transform = "scale(1.2)";
-    setTimeout(() => { diyaBtn.style.transform = ""; }, 220);
-  });
+  let db = null;
+  try {
+    if (window.firebase) {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      db = firebase.database();
+    }
+  } catch (err) {
+    console.warn("Firebase initialization warning:", err);
+  }
+
+  if (db) {
+    // 1. LIVE GLOBAL PRESENCE
+    const sessionId = "listener_" + Math.random().toString(36).substring(2, 10);
+    const userPresenceRef = db.ref("live_listeners/" + sessionId);
+    const connectedRef = db.ref(".info/connected");
+
+    connectedRef.on("value", snap => {
+      if (snap.val() === true) {
+        userPresenceRef.onDisconnect().remove();
+        userPresenceRef.set({
+          ts: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+    });
+
+    db.ref("live_listeners").on("value", snap => {
+      const data = snap.val() || {};
+      const activeGlobalCount = Object.keys(data).length;
+      if (listenersEl) {
+        listenersEl.textContent = Math.max(1, activeGlobalCount).toLocaleString("en-IN");
+      }
+    });
+
+    // 2. LIVE GLOBAL TRIBUTE DIYA COUNTER
+    const diyaRef = db.ref("tributes/diyaCount");
+    diyaRef.on("value", snap => {
+      let count = snap.val();
+      if (typeof count !== "number" || count < 1947) {
+        count = 1947;
+      }
+      if (diyaCountEl) {
+        diyaCountEl.textContent = count.toLocaleString("en-IN");
+      }
+    });
+
+    if (diyaBtn) {
+      diyaBtn.addEventListener("click", () => {
+        diyaRef.transaction(current => {
+          return (typeof current === "number" && current >= 1947) ? current + 1 : 1948;
+        });
+        showToast("🪔 Tribute Diya lit with pride & honour!");
+        diyaBtn.style.transform = "scale(1.2)";
+        setTimeout(() => { diyaBtn.style.transform = ""; }, 220);
+      });
+    }
+  } else {
+    // Graceful offline / fallback
+    let currentDiyas = parseInt(localStorage.getItem("rashtra_diya_count") || "1947", 10);
+    if (diyaCountEl) diyaCountEl.textContent = currentDiyas.toLocaleString("en-IN");
+
+    if (diyaBtn) {
+      diyaBtn.addEventListener("click", () => {
+        currentDiyas++;
+        if (diyaCountEl) diyaCountEl.textContent = currentDiyas.toLocaleString("en-IN");
+        localStorage.setItem("rashtra_diya_count", String(currentDiyas));
+        showToast("🪔 Tribute Diya lit with pride & honour!");
+        diyaBtn.style.transform = "scale(1.2)";
+        setTimeout(() => { diyaBtn.style.transform = ""; }, 220);
+      });
+    }
+  }
 })();
 
 /* ─── Local Clock ─── */
@@ -1462,76 +1536,6 @@ bar.addEventListener("click", e => {
   };
   update();
   setInterval(update, 30000);
-})();
-
-/* ─── Live Listener Counter (Multi-Tab Sync + Real-Time Live Presence) ─── */
-(function() {
-  const el = document.getElementById("listeners");
-  if (!el) return;
-
-  const channel = window.BroadcastChannel ? new BroadcastChannel("aesthetic_radio_presence") : null;
-  const TAB_ID = "tab_" + Math.random().toString(36).substring(2, 9);
-  
-  // Dynamic base crowd that naturally fluctuates between 140 and 260
-  function getBaseAudience() {
-    const d = new Date();
-    const min = d.getMinutes();
-    const sec = d.getSeconds();
-    // Deterministic organic wave based on time of day
-    const wave = Math.sin((min * 60 + sec) / 45) * 18;
-    return Math.floor(175 + wave);
-  }
-
-  function getLocalTabsCount() {
-    try {
-      const now = Date.now();
-      const raw = localStorage.getItem("aesthetic_radio_tabs");
-      let tabs = raw ? JSON.parse(raw) : {};
-      tabs[TAB_ID] = now;
-      Object.keys(tabs).forEach(id => {
-        if (now - tabs[id] > 5000) delete tabs[id];
-      });
-      localStorage.setItem("aesthetic_radio_tabs", JSON.stringify(tabs));
-      return Object.keys(tabs).length;
-    } catch (_) {
-      return 1;
-    }
-  }
-
-  function updateDisplay() {
-    const localTabs = getLocalTabsCount();
-    const base = getBaseAudience();
-    const total = base + (localTabs - 1);
-    el.textContent = total.toLocaleString("en-IN");
-  }
-
-  updateDisplay();
-  setInterval(updateDisplay, 2500);
-
-  // Cross-tab broadcast notification
-  if (channel) {
-    channel.onmessage = () => updateDisplay();
-    try { channel.postMessage("ping"); } catch (_) {}
-  }
-
-  // Cross-window storage listener
-  window.addEventListener("storage", e => {
-    if (e.key === "aesthetic_radio_tabs") {
-      updateDisplay();
-    }
-  });
-
-  window.addEventListener("beforeunload", () => {
-    try {
-      const raw = localStorage.getItem("aesthetic_radio_tabs");
-      if (raw) {
-        let tabs = JSON.parse(raw);
-        delete tabs[TAB_ID];
-        localStorage.setItem("aesthetic_radio_tabs", JSON.stringify(tabs));
-      }
-      if (channel) channel.postMessage("tab_closed");
-    } catch (_) {}
-  });
 })();
 
 /* ─── Floating Tricolor Balloons & Accents ─── */
