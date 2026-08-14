@@ -131,7 +131,7 @@ body {
   50% { opacity: 0.45; transform: scale(0.85); }
 }
 
-/* ─── Floating Particles ─── */
+/* ─── Floating Tricolor Balloons & Accents ─── */
 .particles {
   position: fixed;
   inset: 0;
@@ -141,15 +141,36 @@ body {
 }
 .particle {
   position: absolute;
-  bottom: -40px;
+  bottom: -60px;
   opacity: 0;
-  animation: floatUp linear infinite;
+  pointer-events: none;
+  animation: floatUpBalloon linear infinite;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
 }
-@keyframes floatUp {
-  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 0.65; }
-  85% { opacity: 0.65; }
-  100% { transform: translateY(-115vh) rotate(360deg); opacity: 0; }
+@keyframes floatUpBalloon {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.85;
+  }
+  25% {
+    transform: translateY(-28vh) translateX(14px) rotate(4deg);
+  }
+  50% {
+    transform: translateY(-58vh) translateX(-14px) rotate(-4deg);
+  }
+  75% {
+    transform: translateY(-88vh) translateX(10px) rotate(3deg);
+  }
+  90% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-118vh) translateX(-8px) rotate(-3deg);
+    opacity: 0;
+  }
 }
 
 /* ─── Hero Section ─── */
@@ -1100,20 +1121,50 @@ bar.addEventListener("click", e => {
   });
 })();
 
-/* ─── Floating Flag Particles ─── */
+/* ─── Floating Tricolor Balloons & Accents ─── */
 (function() {
   const container = document.getElementById("particles");
-  const flags = ["🇮🇳", "🪷", "✦", "⭐"];
-  const count = 12;
+  if (!container) return;
+
+  const balloonColors = [
+    { fill: "#FF7722", dark: "#D45500" }, // Saffron
+    { fill: "#FFFFFF", dark: "#CAD1D7" }, // White / Pearl
+    { fill: "#138808", dark: "#0A5E04" }, // Green
+    { fill: "#FF9933", dark: "#D4702A" }, // Warm Saffron
+    { fill: "#229954", dark: "#145A32" }  // Rich Green
+  ];
+
+  const accents = ["🪷", "✦", "✨", "⭐"];
+  const count = 16;
 
   for (let i = 0; i < count; i++) {
-    const p = document.createElement("span");
+    const p = document.createElement("div");
     p.className = "particle";
-    p.textContent = flags[Math.floor(Math.random() * flags.length)];
-    p.style.left = Math.random() * 100 + "%";
-    p.style.fontSize = (12 + Math.random() * 14) + "px";
-    p.style.animationDuration = (14 + Math.random() * 18) + "s";
-    p.style.animationDelay = (Math.random() * 20) + "s";
+    p.style.left = (Math.random() * 95 + 2.5) + "%";
+    p.style.animationDuration = (14 + Math.random() * 14) + "s";
+    p.style.animationDelay = (Math.random() * 16) + "s";
+
+    // 75% balloons, 25% delicate celebratory accents
+    if (i % 4 !== 0) {
+      const col = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+      const size = 20 + Math.random() * 14;
+      p.style.width = size + "px";
+      p.style.height = (size * 1.45) + "px";
+      p.innerHTML = `
+        <svg viewBox="0 0 32 46" width="100%" height="100%" style="overflow:visible;">
+          <ellipse cx="16" cy="16" rx="13" ry="15.5" fill="${col.fill}" />
+          <ellipse cx="11" cy="11" rx="3.5" ry="5.5" fill="rgba(255,255,255,0.45)" transform="rotate(-25 11 11)" />
+          <polygon points="16,31 13,34.5 19,34.5" fill="${col.dark}" />
+          <path d="M16,34.5 Q12,39 16,43 T15,48" stroke="rgba(255,255,255,0.55)" stroke-width="1.2" fill="none" />
+        </svg>
+      `;
+    } else {
+      const sym = accents[Math.floor(Math.random() * accents.length)];
+      p.textContent = sym;
+      p.style.fontSize = (13 + Math.random() * 8) + "px";
+      p.style.color = "rgba(255, 248, 220, 0.75)";
+    }
+
     container.appendChild(p);
   }
 })();
