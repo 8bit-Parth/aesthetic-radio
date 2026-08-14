@@ -6,7 +6,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Happy Independence Day · स्वतंत्रता दिवस</title>
 <meta name="description" content="कुछ गाने, कुछ यादें, और एक आज़ाद हिंदुस्तान. Press play and celebrate 15 August. 🇮🇳">
-<link rel="canonical" href="https://azaadi.xyz/">
+<link rel="canonical" href="https://8bit-parth.github.io/aesthetic-radio/">
 <meta name="theme-color" content="#244b27">
 
 <!-- Social share (WhatsApp / X / iMessage) -->
@@ -1077,19 +1077,19 @@ bar.addEventListener("click", e => {
   const el = document.getElementById("listeners");
   if (!el) return;
 
-  const channel = window.BroadcastChannel ? new BroadcastChannel("azaadi_radio_presence") : null;
+  const channel = window.BroadcastChannel ? new BroadcastChannel("aesthetic_radio_presence") : null;
   const TAB_ID = Math.random().toString(36).substring(2, 9);
   
   function getActiveTabsCount() {
     try {
       const now = Date.now();
-      const raw = localStorage.getItem("azaadi_active_tabs");
+      const raw = localStorage.getItem("aesthetic_radio_tabs");
       let tabs = raw ? JSON.parse(raw) : {};
       tabs[TAB_ID] = now;
       Object.keys(tabs).forEach(id => {
         if (now - tabs[id] > 6000) delete tabs[id];
       });
-      localStorage.setItem("azaadi_active_tabs", JSON.stringify(tabs));
+      localStorage.setItem("aesthetic_radio_tabs", JSON.stringify(tabs));
       return Object.keys(tabs).length;
     } catch (_) {
       return 1;
@@ -1111,11 +1111,11 @@ bar.addEventListener("click", e => {
 
   window.addEventListener("beforeunload", () => {
     try {
-      const raw = localStorage.getItem("azaadi_active_tabs");
+      const raw = localStorage.getItem("aesthetic_radio_tabs");
       if (raw) {
         let tabs = JSON.parse(raw);
         delete tabs[TAB_ID];
-        localStorage.setItem("azaadi_active_tabs", JSON.stringify(tabs));
+        localStorage.setItem("aesthetic_radio_tabs", JSON.stringify(tabs));
       }
     } catch (_) {}
   });
